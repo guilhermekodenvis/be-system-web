@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { shade } from 'polished'
+import { shade, opacify, transparentize } from 'polished'
 
 import { ButtonProps } from './index'
 
@@ -31,5 +31,18 @@ export const Container = styled.button<Omit<ButtonProps, 'label'>>`
 		props.size === 'big' &&
 		css`
 			width: 100%;
+		`}
+
+		${props =>
+		props.variant === 'secundary-outline' &&
+		css`
+			background: transparent;
+			border: 1px solid #4c60e6;
+			color: #4c60e6;
+			font-weight: bold;
+
+			&:hover {
+				background: ${transparentize(0.8, shade(0.2, '#4c60e6'))};
+			}
 		`}
 `
