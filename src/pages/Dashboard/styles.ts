@@ -27,20 +27,6 @@ export const TableRequest = styled.div`
 	padding: 12px;
 	display: flex;
 	flex-direction: column;
-
-	button {
-		width: 48px;
-		height: 36px;
-		background: #4c60e6;
-		border-radius: 6px;
-		border: none;
-		align-self: flex-end;
-		margin-top: 12px;
-		transition: 0.2s;
-		&:hover {
-			background: ${shade(0.2, '#4c60e6')};
-		}
-	}
 `
 
 export const FAB = styled.button`
@@ -60,5 +46,38 @@ export const FAB = styled.button`
 	transition: 0.2s;
 	&:hover {
 		background: ${shade(0.2, '#e36414')};
+	}
+`
+
+export const ButtonGroup = styled.div`
+	display: flex;
+	justify-content: space-around;
+
+	button {
+		width: 48px;
+		height: 36px;
+		background: #4c60e6;
+		border-radius: 6px;
+		border: none;
+		margin-top: 12px;
+		transition: 0.2s;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		&:first-child {
+			background: #ba4ff0;
+			&:hover {
+				background: ${shade(0.2, '#ba4ff0')};
+			}
+		}
+
+		&:hover {
+			background: ${shade(0.2, '#4c60e6')};
+		}
+
+		svg {
+			color: #e9e3ff;
+		}
 	}
 `

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 
-import { FiPlus } from 'react-icons/fi'
+import { FiEdit2, FiInbox, FiPlus } from 'react-icons/fi'
 import { useHistory } from 'react-router-dom'
-import { Container, FAB, TableRequest } from './styles'
+import { Container, FAB, TableRequest, ButtonGroup } from './styles'
 
 import addToCartIcon from '../../assets/add-to-cart.svg'
 import api from '../../services/api'
@@ -55,13 +55,22 @@ const Dashboard: React.FC = () => {
 								) || 0,
 							)}
 						</p>
-						<button
-							onClick={() =>
-								history.push(`adicionar-produto/${tableRequest.id}`)
-							}
-						>
-							<img src={addToCartIcon} alt="add to cart" />
-						</button>
+						<ButtonGroup>
+							<button
+								onClick={() =>
+									history.push(`detalhes-do-pedido/${tableRequest.id}`)
+								}
+							>
+								<FiInbox size={24} />
+							</button>
+							<button
+								onClick={() =>
+									history.push(`adicionar-produto/${tableRequest.id}`)
+								}
+							>
+								<FiEdit2 size={24} />
+							</button>
+						</ButtonGroup>
 					</TableRequest>
 				))}
 			</div>

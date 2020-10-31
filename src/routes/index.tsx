@@ -34,16 +34,16 @@ const Routes: React.FC = () => (
 				component={ProductsToRequest}
 				isPrivate
 			/>
+			<Route
+				path="/detalhes-do-pedido/:table_id"
+				component={TableRequestDetails}
+				isPrivate
+			/>
 			{/* <Route
 				path="/pedidos/:table-request-id"
 				component={ProductsToRequest}
 				isPrivate
 			/> */}
-			<Route
-				path="/detalhes-do-pedido"
-				component={TableRequestDetails}
-				isPrivate
-			/>
 			<Route path="/novo-pedido" component={SelectTable} isPrivate />
 		</AppContainer>
 		{/* <ReactDOMRoute path="*">
