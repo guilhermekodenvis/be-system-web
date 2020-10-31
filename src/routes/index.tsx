@@ -30,15 +30,15 @@ const Routes: React.FC = () => (
 			<Route exact path="/produtos" component={Products} isPrivate />
 			<Route exact path="/abrir-caixa" component={OpenCashier} isPrivate />
 			<Route
-				path="/adicionar-produto/:tableNumber?"
+				path="/adicionar-produto/:table_id"
 				component={ProductsToRequest}
 				isPrivate
 			/>
-			<Route
+			{/* <Route
 				path="/pedidos/:table-request-id"
 				component={ProductsToRequest}
 				isPrivate
-			/>
+			/> */}
 			<Route
 				path="/detalhes-do-pedido"
 				component={TableRequestDetails}

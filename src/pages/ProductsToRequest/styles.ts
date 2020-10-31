@@ -23,6 +23,12 @@ export const Container = styled.div`
 		}
 	}
 
+	.products-list {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+
 	.bt-send-to-kitchen {
 		width: 100%;
 		padding: 12px;
@@ -67,7 +73,7 @@ export const Product = styled.div`
 				margin-left: auto;
 			}
 			&.more {
-				background: #35d08f;
+				background: #2db27b;
 			}
 		}
 	}
@@ -100,9 +106,11 @@ export const BottomNavigation = styled.div`
 			width: 100%;
 			text-transform: uppercase;
 			letter-spacing: 1px;
+			transition: 0.2s;
+			cursor: pointer;
 
 			&.active {
-				border-top: 6px solid #e36414;
+				border-bottom: 6px solid #e36414;
 				font-weight: bold;
 			}
 		}

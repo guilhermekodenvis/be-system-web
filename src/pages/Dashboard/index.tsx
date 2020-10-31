@@ -5,34 +5,29 @@ import { useHistory } from 'react-router-dom'
 import { Container, FAB, TableRequest } from './styles'
 
 import addToCartIcon from '../../assets/add-to-cart.svg'
+import api from '../../services/api'
 
 interface TableRequest {
-	table_number: number
-	accumulated: number
+	id: string
+	number: number
+	products: Products[]
+}
+
+interface Products {
+	product_price: number
+	quantity: number
 }
 
 const Dashboard: React.FC = () => {
 	const [tableRequests, setTableRequests] = useState<TableRequest[]>()
 	const history = useHistory()
+
 	useEffect(() => {
-		setTableRequests([
-			{
-				table_number: 3,
-				accumulated: 29.9,
-			},
-			{
-				table_number: 7,
-				accumulated: 19.9,
-			},
-			{
-				table_number: 13,
-				accumulated: 292.9,
-			},
-			{
-				table_number: 43,
-				accumulated: 2.9,
-			},
-		])
+		;(async () => {
+			const { data } = await api.get('/table-request/')
+			console.log(data)
+			setTableRequests(data)
+		})()
 	}, [])
 
 	return (
@@ -41,12 +36,28 @@ const Dashboard: React.FC = () => {
 			<p>Clique na mesa para ver os pedidos</p>
 			<div className="tables">
 				{tableRequests?.map((tableRequest, i) => (
-					<TableRequest key={i}>
-						<h2>Mesa {tableRequest.table_number}</h2>
-						<p>Valor total: {tableRequest.accumulated}</p>
+					<TableRequest
+						key={i}
+						// onClick={() => {
+						// 	history.push(`detalhes/${tableRequest.id}`)
+						// }}
+					>
+						<h2>Mesa {tableRequest.number}</h2>
+						<p>
+							Total:{' '}
+							{new Intl.NumberFormat('pt-BR', {
+								currency: 'BRL',
+								style: 'currency',
+							}).format(
+								tableRequest.products?.reduce(
+									(a, b) => a + (b.product_price || 0),
+									0,
+								) || 0,
+							)}
+						</p>
 						<button
 							onClick={() =>
-								history.push(`/adicionar-produto/${tableRequest.table_number}`)
+								history.push(`adicionar-produto/${tableRequest.id}`)
 							}
 						>
 							<img src={addToCartIcon} alt="add to cart" />
