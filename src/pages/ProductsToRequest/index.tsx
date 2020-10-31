@@ -176,6 +176,18 @@ const ProductsToRequest: React.FC = () => {
 		})
 	}, [filteredProducts, handleDecrementCart, handleIncrementCart])
 
+	const finalPrice = useMemo(() => {
+		return new Intl.NumberFormat('pt-BR', {
+			currency: 'BRL',
+			style: 'currency',
+		}).format(
+			productsInCart.reduce(
+				(a, b) => a + (b.product_price * b.quantity || 0),
+				0,
+			) || 0,
+		)
+	}, [productsInCart])
+
 	return (
 		<Container>
 			<h1>Anotar pedido</h1>
@@ -185,7 +197,7 @@ const ProductsToRequest: React.FC = () => {
 			</p>
 			<div>
 				<strong>
-					Total: <span>R$ 9,00</span>
+					Total: <span>{finalPrice}</span>
 				</strong>
 				<Button
 					disabled
