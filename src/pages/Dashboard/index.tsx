@@ -50,7 +50,7 @@ const Dashboard: React.FC = () => {
 								style: 'currency',
 							}).format(
 								tableRequest.products?.reduce(
-									(a, b) => a + (b.product_price || 0),
+									(a, b) => a + (b.product_price * b.quantity || 0),
 									0,
 								) || 0,
 							)}
