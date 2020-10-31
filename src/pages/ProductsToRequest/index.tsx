@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FiMinus, FiPlus } from 'react-icons/fi'
 import { useHistory, useParams } from 'react-router-dom'
 import Button from '../../components/Button'
+import { useSnack } from '../../hooks/snack'
 import api from '../../services/api'
 
 import { Container, Product, BottomNavigation } from './styles'
@@ -29,6 +30,7 @@ const ProductsToRequest: React.FC = () => {
 	const [activedCategory, setActivedCategory] = useState<number>(0)
 	const [productsInCart, setProductsInCart] = useState<CartProduct[]>([])
 	const { table_id } = useParams<{ table_id: string }>()
+	const { addSnack } = useSnack()
 
 	const handleIncrementCart = useCallback((product: Product) => {
 		const newQtt = product.quantity + 1 || 1
@@ -90,11 +92,16 @@ const ProductsToRequest: React.FC = () => {
 			products: [...productsInCart],
 			table_id,
 		})
-		// if(data) {
-		// 	addToas
-		// }
-		console.log(data)
-	}, [productsInCart, table_id])
+		if (data) {
+			addSnack({
+				title: 'Pronto!',
+				description: 'O pedido foi enviado para a cozinha',
+				type: 'success',
+			})
+			history.push('/')
+		}
+		// console.log(data)
+	}, [addSnack, history, productsInCart, table_id])
 
 	useEffect(() => {
 		console.log(productsInCart)
