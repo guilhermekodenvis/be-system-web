@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import { stripUnit } from 'polished'
+import { shade } from 'polished'
 import styled, { css } from 'styled-components'
 
 export const Container = styled.div`
@@ -40,7 +40,7 @@ export const Container = styled.div`
 
 export const Product = styled.div`
 	width: calc(50% - 12px);
-	min-height: 130px;
+	min-height: 144px;
 	background: #382e63;
 	margin-top: 24px;
 	border-radius: 12px;
@@ -49,20 +49,32 @@ export const Product = styled.div`
 	display: flex;
 	flex-direction: column;
 
+	strong {
+		align-self: flex-start;
+	}
+
+	p {
+		display: flex;
+		width: 100%;
+		padding-left: 12px;
+		justify-content: space-between;
+	}
+
 	.quantity {
 		flex: 1;
 		display: flex;
 		width: 100%;
 		padding-left: 12px;
-		align-items: center;
+		align-items: baseline;
+		justify-content: space-between;
 		span {
 			padding: 0 6px;
 		}
 		button {
 			border: none;
 			color: #e9e3ff;
-			width: 24px;
-			height: 24px;
+			width: 36px;
+			height: 30px;
 			border-radius: 6px;
 			display: flex;
 			align-items: center;
@@ -71,9 +83,15 @@ export const Product = styled.div`
 			&.less {
 				background: #d95267;
 				margin-left: auto;
+				&:hover {
+					background: ${shade(0.2, '#d95267')};
+				}
 			}
 			&.more {
 				background: #2db27b;
+				&:hover {
+					background: ${shade(0.2, '#2db27b')};
+				}
 			}
 		}
 	}

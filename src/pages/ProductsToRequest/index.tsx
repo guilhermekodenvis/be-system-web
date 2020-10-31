@@ -62,16 +62,39 @@ const ProductsToRequest: React.FC = () => {
 	}, [])
 
 	const handleDecrementCart = useCallback((product: Product) => {
-		console.log('oui')
+		const newQtt = product.quantity - 1
+		setProducts(prev => {
+			const newList = [...prev]
+			const findIndex = newList.findIndex(
+				prevProd => prevProd.id === product.id,
+			)
+			newList[findIndex].quantity = newQtt
+			return [...newList]
+		})
+
+		setProductsInCart(prev => {
+			const newList = [...prev]
+			const findIndex = newList.findIndex(
+				prevProd => prevProd.product_id === product.id,
+			)
+			newList[findIndex].quantity = newQtt
+			if (newQtt === 0) {
+				newList.splice(findIndex, 1)
+			}
+			return [...newList]
+		})
 	}, [])
 
 	const handleClickSendToKitchen = useCallback(async () => {
-		const response = await api.post('/table-request/add-products', {
+		const { data } = await api.post('/table-request/add-products', {
 			products: [...productsInCart],
 			table_id,
 		})
-		console.log(response.data)
-	}, [productsInCart])
+		// if(data) {
+		// 	addToas
+		// }
+		console.log(data)
+	}, [productsInCart, table_id])
 
 	useEffect(() => {
 		console.log(productsInCart)
@@ -118,6 +141,7 @@ const ProductsToRequest: React.FC = () => {
 				<Product key={i}>
 					<strong>{product.name}</strong>
 					<p>
+						<span>Preço </span>
 						{new Intl.NumberFormat('pt-BR', {
 							style: 'currency',
 							currency: 'BRL',
@@ -125,28 +149,32 @@ const ProductsToRequest: React.FC = () => {
 					</p>
 					<div className="quantity">
 						<span>Qtd.</span>
-						<button
-							className="less"
-							onClick={() => {
-								handleDecrementCart(product)
-							}}
-						>
-							<FiMinus />
-						</button>
-						<span>{product.quantity || 0}</span>
-						<button
-							className="more"
-							onClick={() => {
-								handleIncrementCart(product)
-							}}
-						>
-							<FiPlus />
-						</button>
+						<div>
+							{product.quantity > 0 && product.quantity && (
+								<button
+									className="less"
+									onClick={() => {
+										handleDecrementCart(product)
+									}}
+								>
+									<FiMinus size={24} />
+								</button>
+							)}
+							<span>{product.quantity || 0}</span>
+							<button
+								className="more"
+								onClick={() => {
+									handleIncrementCart(product)
+								}}
+							>
+								<FiPlus size={18} />
+							</button>
+						</div>
 					</div>
 				</Product>
 			)
 		})
-	}, [filteredProducts])
+	}, [filteredProducts, handleDecrementCart, handleIncrementCart])
 
 	return (
 		<Container>
