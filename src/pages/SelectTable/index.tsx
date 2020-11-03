@@ -1,5 +1,5 @@
 import { Form } from '@unform/web'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { useHistory } from 'react-router-dom'
@@ -9,12 +9,18 @@ import getValidationErrors from '../../utils/getValidationErrors'
 
 import { Container } from './styles'
 import api from '../../services/api'
+import { useModule } from '../../hooks/module'
 
 interface ContinueToRequestFormData {
 	table_number: string
 }
 
 const SelectTable: React.FC = () => {
+	const { changeModule } = useModule()
+
+	useEffect(() => {
+		changeModule('requests')
+	}, [changeModule])
 	const history = useHistory()
 	const formRef = useRef<FormHandles>(null)
 	const handleSubmit = useCallback(

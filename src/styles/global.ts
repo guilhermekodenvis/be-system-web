@@ -27,10 +27,11 @@ export default createGlobalStyle`
 
 	#root {
 		min-height: 100vh;
-		min-width: 100vw;
+		max-width: 100vw;
 		display: flex;
 		flex-direction: column;
-		padding: 0
+		padding: 0;
+		overflow-y: hidden;
 	}
 
 

@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FiMinus, FiPlus } from 'react-icons/fi'
 import { useHistory, useParams } from 'react-router-dom'
 import Button from '../../components/Button'
+import { useModule } from '../../hooks/module'
 import { useSnack } from '../../hooks/snack'
 import api from '../../services/api'
 
@@ -31,6 +32,11 @@ const ProductsToRequest: React.FC = () => {
 	const [productsInCart, setProductsInCart] = useState<CartProduct[]>([])
 	const { table_id } = useParams<{ table_id: string }>()
 	const { addSnack } = useSnack()
+	const { changeModule } = useModule()
+
+	useEffect(() => {
+		changeModule('requests')
+	}, [changeModule])
 
 	const handleIncrementCart = useCallback((product: Product) => {
 		const newQtt = product.quantity + 1 || 1

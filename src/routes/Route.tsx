@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom'
 
 import { useAuth } from '../hooks/auth'
+import { useModule } from '../hooks/module'
 
 interface RouteProps extends ReactDOMRouteProps {
 	isPrivate?: boolean
@@ -18,6 +19,7 @@ const Route: React.FC<RouteProps> = ({
 	...rest
 }) => {
 	const { user } = useAuth()
+	const { changeModule } = useModule()
 
 	return (
 		<ReactDOMRoute

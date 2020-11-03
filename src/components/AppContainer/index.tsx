@@ -1,7 +1,9 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 
-import { Container, SideBar, TopBar, Main } from './styles'
+import { Container, TopBar, Main } from './styles'
+
+import SideMenu from '../SideMenu'
 
 const AppContainer: React.FC = ({ children }) => {
 	const history = useHistory()
@@ -11,10 +13,10 @@ const AppContainer: React.FC = ({ children }) => {
 	}
 	return (
 		<Container>
-			<SideBar></SideBar>
 			<TopBar>
 				<title onClick={handleClickTitle}> beSystem </title>
 			</TopBar>
+			<SideMenu />
 			<Main>{children}</Main>
 		</Container>
 	)

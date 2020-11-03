@@ -1,6 +1,6 @@
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { FiArrowLeft } from 'react-icons/fi'
 import * as Yup from 'yup'
 import { useHistory } from 'react-router-dom'
@@ -11,6 +11,7 @@ import api from '../../services/api'
 import getValidationErrors from '../../utils/getValidationErrors'
 
 import { Container, Header } from './styles'
+import { useModule } from '../../hooks/module'
 
 interface FormNewProductData {
 	name: string
@@ -24,6 +25,11 @@ const NewProduct: React.FC = () => {
 	const history = useHistory()
 	const formRef = useRef<FormHandles>(null)
 	const { addSnack } = useSnack()
+	const { changeModule } = useModule()
+
+	useEffect(() => {
+		changeModule('products')
+	}, [changeModule])
 
 	const handleSubmit = useCallback(
 		async (data: FormNewProductData) => {

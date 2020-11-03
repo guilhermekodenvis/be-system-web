@@ -2,10 +2,13 @@ import React from 'react'
 
 import { AuthProvider } from './auth'
 import { SnackProvider } from './snack'
+import { ModuleProvider } from './module'
 
 const AppProvider: React.FC = ({ children }) => (
 	<AuthProvider>
-		<SnackProvider>{children}</SnackProvider>
+		<SnackProvider>
+			<ModuleProvider>{children}</ModuleProvider>
+		</SnackProvider>
 	</AuthProvider>
 )
 

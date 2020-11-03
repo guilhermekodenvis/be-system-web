@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { FiArrowLeft, FiTrash2, FiEdit3 } from 'react-icons/fi'
+import { useModule } from '../../hooks/module'
 import api from '../../services/api'
 
 import { Container, Header, Table, ActionsGroup } from './styles'
@@ -14,6 +15,12 @@ interface Product {
 
 const Products: React.FC = () => {
 	const [products, setProducts] = useState<Omit<Product[], 'price'>>()
+
+	const { changeModule } = useModule()
+
+	useEffect(() => {
+		changeModule('products')
+	}, [changeModule])
 
 	useEffect(() => {
 		;(async () => {

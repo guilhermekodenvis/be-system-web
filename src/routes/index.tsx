@@ -29,7 +29,7 @@ const Routes: React.FC = () => (
 
 			<Route exact path="/novo-produto" component={NewProduct} isPrivate />
 			<Route exact path="/produtos" component={Products} isPrivate />
-			<Route exact path="/abrir-caixa" component={OpenCashier} isPrivate />
+
 			<Route
 				path="/adicionar-produto/:table_id"
 				component={ProductsToRequest}
@@ -40,13 +40,13 @@ const Routes: React.FC = () => (
 				component={TableRequestDetails}
 				isPrivate
 			/>
-
+			<Route path="/novo-pedido" component={SelectTable} isPrivate />
 			<Route
 				path="/finalizar/:table_id"
 				component={PayTableRequest}
 				isPrivate
 			/>
-			<Route path="/novo-pedido" component={SelectTable} isPrivate />
+			<Route exact path="/abrir-caixa" component={OpenCashier} isPrivate />
 		</AppContainer>
 		{/* <ReactDOMRoute path="*">
 			<Error404 />

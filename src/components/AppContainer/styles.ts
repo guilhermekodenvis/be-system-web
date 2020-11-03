@@ -1,11 +1,21 @@
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 
-export const Container = styled.div``
-
-export const SideBar = styled.aside``
+export const Container = styled.div`
+	display: grid;
+	grid-template-areas:
+		'topbar topbar'
+		'sidemenu main';
+	overflow-y: hidden;
+	max-width: 100%;
+	min-height: 100vh;
+	grid-template-columns: 288px auto;
+	grid-template-rows: 72px auto;
+`
 
 export const TopBar = styled.header`
-	width: 100%;
+	z-index: 1;
+	grid-area: topbar;
+	width: 100vw;
 	height: 72px;
 	background: #382e63;
 	display: flex;
@@ -24,8 +34,9 @@ export const TopBar = styled.header`
 export const Main = styled.main`
 	margin: 0 auto;
 	width: 100%;
+	grid-area: main;
 
-	@media (min-width: 1164px) {
+	@media (min-width: calc(1164px)) {
 		width: 1164px;
 	}
 `

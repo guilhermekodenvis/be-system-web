@@ -15,6 +15,7 @@ import { Container, FAB, TableRequest, ButtonGroup } from './styles'
 
 import addToCartIcon from '../../assets/add-to-cart.svg'
 import api from '../../services/api'
+import { useModule } from '../../hooks/module'
 
 interface TableRequest {
 	id: string
@@ -30,6 +31,7 @@ interface Products {
 const Dashboard: React.FC = () => {
 	const [tableRequests, setTableRequests] = useState<TableRequest[]>()
 	const history = useHistory()
+	const { changeModule } = useModule()
 
 	useEffect(() => {
 		;(async () => {
@@ -37,7 +39,8 @@ const Dashboard: React.FC = () => {
 			console.log(data)
 			setTableRequests(data)
 		})()
-	}, [])
+		changeModule('requests')
+	}, [changeModule])
 
 	return (
 		<Container>

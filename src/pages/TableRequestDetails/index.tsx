@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import Button from '../../components/Button'
+import { useModule } from '../../hooks/module'
 import api from '../../services/api'
 
 import { Container, RequestItem, RequestList } from './styles'
@@ -27,6 +28,12 @@ const TableRequestDetails: React.FC = () => {
 			setTableRequest(data)
 		})()
 	}, [table_id])
+	const { changeModule } = useModule()
+
+	useEffect(() => {
+		changeModule('requests')
+	}, [changeModule])
+
 	return (
 		<Container>
 			<h1>Mesa {tableRequest?.number}</h1>
