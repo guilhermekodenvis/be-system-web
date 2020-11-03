@@ -16,6 +16,7 @@ import Error404 from '../pages/Error404'
 import ProductsToRequest from '../pages/ProductsToRequest'
 import TableRequestDetails from '../pages/TableRequestDetails'
 import SelectTable from '../pages/SelectTable'
+import PayTableRequest from '../pages/PayTableRequest'
 
 const Routes: React.FC = () => (
 	<Switch>
@@ -39,11 +40,12 @@ const Routes: React.FC = () => (
 				component={TableRequestDetails}
 				isPrivate
 			/>
-			{/* <Route
-				path="/pedidos/:table-request-id"
-				component={ProductsToRequest}
+
+			<Route
+				path="/finalizar/:table_id"
+				component={PayTableRequest}
 				isPrivate
-			/> */}
+			/>
 			<Route path="/novo-pedido" component={SelectTable} isPrivate />
 		</AppContainer>
 		{/* <ReactDOMRoute path="*">

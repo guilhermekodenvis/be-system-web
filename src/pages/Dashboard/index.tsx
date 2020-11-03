@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react'
 
-import { FiEdit2, FiInbox, FiPlus } from 'react-icons/fi'
+import {
+	FiCreditCard,
+	FiDollarSign,
+	FiEdit2,
+	FiInbox,
+	FiList,
+	FiPlus,
+	FiShoppingBag,
+	FiShoppingCart,
+} from 'react-icons/fi'
 import { useHistory } from 'react-router-dom'
 import { Container, FAB, TableRequest, ButtonGroup } from './styles'
 
@@ -61,14 +70,19 @@ const Dashboard: React.FC = () => {
 									history.push(`detalhes-do-pedido/${tableRequest.id}`)
 								}
 							>
-								<FiInbox size={24} />
+								<FiList size={24} />
 							</button>
 							<button
 								onClick={() =>
 									history.push(`adicionar-produto/${tableRequest.id}`)
 								}
 							>
-								<FiEdit2 size={24} />
+								<FiShoppingCart size={24} />
+							</button>
+							<button
+								onClick={() => history.push(`finalizar/${tableRequest.id}`)}
+							>
+								<FiDollarSign size={24} />
 							</button>
 						</ButtonGroup>
 					</TableRequest>
