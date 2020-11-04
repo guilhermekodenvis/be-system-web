@@ -17,6 +17,7 @@ import ProductsToRequest from '../pages/ProductsToRequest'
 import TableRequestDetails from '../pages/TableRequestDetails'
 import SelectTable from '../pages/SelectTable'
 import PayTableRequest from '../pages/PayTableRequest'
+import CloseCashier from '../pages/CloseCashier'
 
 const Routes: React.FC = () => (
 	<Switch>
@@ -47,6 +48,7 @@ const Routes: React.FC = () => (
 				isPrivate
 			/>
 			<Route exact path="/abrir-caixa" component={OpenCashier} isPrivate />
+			<Route exact path="/fechar-caixa" component={CloseCashier} isPrivate />
 		</AppContainer>
 		{/* <ReactDOMRoute path="*">
 			<Error404 />

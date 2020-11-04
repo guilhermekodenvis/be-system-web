@@ -1,11 +1,12 @@
 import { Form } from '@unform/web'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FiPlusCircle, FiTrash2 } from 'react-icons/fi'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import Button from '../../components/Button'
 import Input from '../../components/Input'
 import { useAuth } from '../../hooks/auth'
 import { useModule } from '../../hooks/module'
+import { useSnack } from '../../hooks/snack'
 import api from '../../services/api'
 
 import { Container, Header, Body, Left, Right, PaymentList } from './styles'
@@ -37,12 +38,14 @@ const PayTableRequest: React.FC = () => {
 		{} as TableRequest,
 	)
 	const { changeModule } = useModule()
+	const { addSnack } = useSnack()
+	const { table_id } = useParams<{ table_id: string }>()
+	const history = useHistory()
 
 	useEffect(() => {
 		changeModule('cashier')
 	}, [changeModule])
 
-	const { table_id } = useParams<{ table_id: string }>()
 	const handleSubmit = useCallback(({ value, type }: DataForm) => {
 		// console.log(data)
 		setPaymentMethods(prev => [...prev, { value, type: Number(type) }])
@@ -121,17 +124,23 @@ const PayTableRequest: React.FC = () => {
 		// console.log(payback, paymentMethods)
 		try {
 			if (payback > 0) {
-				// setPaymentMethods(prev => [...prev, { type: 5, value: payback }])
 				const { data } = await api.post('/cashier-moviments/finish-payment', {
 					payments: [...paymentMethods, { type: 5, value: payback }],
 					table_id,
 				})
-				// console.log(data)
+				console.log(data)
 			} else {
 				const { data } = await api.post('/cashier-moviments/finish-payment', {
 					payments: paymentMethods,
+					table_id,
 				})
 			}
+			addSnack({
+				title: 'Sucesso!',
+				description: 'O pagamento foi finalizado',
+				type: 'success',
+			})
+			history.push('/')
 		} catch (err) {
 			console.log(err)
 		}
