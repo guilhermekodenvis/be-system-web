@@ -17,7 +17,7 @@ interface DataForm {
 
 interface PaymentMethod {
 	value: number
-	type: string
+	type: number
 }
 
 interface TableRequest {
@@ -41,12 +41,11 @@ const PayTableRequest: React.FC = () => {
 	useEffect(() => {
 		changeModule('cashier')
 	}, [changeModule])
-	const {
-		user: { id: user_id },
-	} = useAuth()
+
 	const { table_id } = useParams<{ table_id: string }>()
-	const handleSubmit = useCallback((data: DataForm) => {
-		setPaymentMethods(prev => [...prev, data])
+	const handleSubmit = useCallback(({ value, type }: DataForm) => {
+		// console.log(data)
+		setPaymentMethods(prev => [...prev, { value, type: Number(type) }])
 	}, [])
 
 	const handleDelete = useCallback((i: number) => {
@@ -61,7 +60,7 @@ const PayTableRequest: React.FC = () => {
 		;(async () => {
 			const { data } = await api.get(`/table-request/${table_id}`)
 			setTableRequest(data)
-			console.log(data)
+			// console.log(data)
 		})()
 	}, [table_id])
 
@@ -119,15 +118,20 @@ const PayTableRequest: React.FC = () => {
 	}, [payback])
 
 	const handleClickCloseRequest = useCallback(async () => {
+		// console.log(payback, paymentMethods)
 		try {
 			if (payback > 0) {
-				setPaymentMethods(prev => [...prev, { type: '5', value: payback }])
+				// setPaymentMethods(prev => [...prev, { type: 5, value: payback }])
+				const { data } = await api.post('/cashier-moviments/finish-payment', {
+					payments: [...paymentMethods, { type: 5, value: payback }],
+					table_id,
+				})
+				// console.log(data)
+			} else {
+				const { data } = await api.post('/cashier-moviments/finish-payment', {
+					payments: paymentMethods,
+				})
 			}
-			const { data } = await api.post('/cashier-moviments/finish-payment', {
-				payments: paymentMethods,
-			})
-
-			console.log(data)
 		} catch (err) {
 			console.log(err)
 		}
@@ -169,7 +173,7 @@ const PayTableRequest: React.FC = () => {
 					<Form onSubmit={handleSubmit}>
 						<Input label="Valor" name="value" />
 						<Input label="" name="type" />
-						<button>
+						<button type="submit">
 							<FiPlusCircle size={24} />
 						</button>
 					</Form>
