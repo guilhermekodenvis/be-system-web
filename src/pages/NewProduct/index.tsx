@@ -77,7 +77,7 @@ const NewProduct: React.FC = () => {
 				// })
 			}
 		},
-		[addSnack],
+		[addSnack, history],
 	)
 
 	const handleClickCancel = useCallback(() => {
