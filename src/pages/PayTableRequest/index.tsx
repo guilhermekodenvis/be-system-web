@@ -123,7 +123,7 @@ const PayTableRequest: React.FC = () => {
 		// console.log(payback, paymentMethods)
 		try {
 			if (payback > 0) {
-				const { data } = await api.post('/cashier-moviments/finish-payment', {
+				await api.post('/cashier-moviments/finish-payment', {
 					payments: [...paymentMethods, { type: 5, value: payback }],
 					table_id,
 				})

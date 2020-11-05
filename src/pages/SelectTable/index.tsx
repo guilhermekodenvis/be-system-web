@@ -61,7 +61,7 @@ const SelectTable: React.FC = () => {
 				// })
 			}
 		},
-		[],
+		[history],
 	)
 	return (
 		<Container>
