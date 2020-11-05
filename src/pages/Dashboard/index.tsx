@@ -1,19 +1,9 @@
 import React, { useEffect, useState } from 'react'
 
-import {
-	FiCreditCard,
-	FiDollarSign,
-	FiEdit2,
-	FiInbox,
-	FiList,
-	FiPlus,
-	FiShoppingBag,
-	FiShoppingCart,
-} from 'react-icons/fi'
+import { FiDollarSign, FiList, FiPlus, FiShoppingCart } from 'react-icons/fi'
 import { useHistory } from 'react-router-dom'
 import { Container, FAB, TableRequest, ButtonGroup } from './styles'
 
-import addToCartIcon from '../../assets/add-to-cart.svg'
 import api from '../../services/api'
 import { useModule } from '../../hooks/module'
 

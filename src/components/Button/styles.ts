@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { shade, opacify, transparentize } from 'polished'
+import { shade, transparentize } from 'polished'
 
 import { ButtonProps } from './index'
 

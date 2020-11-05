@@ -1,5 +1,5 @@
 import React from 'react'
-import { Switch, Route as ReactDOMRoute } from 'react-router-dom'
+import { Switch } from 'react-router-dom'
 
 import Route from './Route'
 
@@ -12,7 +12,7 @@ import NewProduct from '../pages/NewProduct'
 import Products from '../pages/Products'
 import OpenCashier from '../pages/OpenCashier'
 import AppContainer from '../components/AppContainer'
-import Error404 from '../pages/Error404'
+// import Error404 from '../pages/Error404'
 import ProductsToRequest from '../pages/ProductsToRequest'
 import TableRequestDetails from '../pages/TableRequestDetails'
 import SelectTable from '../pages/SelectTable'

@@ -4,7 +4,6 @@ import { FiPlusCircle, FiTrash2 } from 'react-icons/fi'
 import { useHistory, useParams } from 'react-router-dom'
 import Button from '../../components/Button'
 import Input from '../../components/Input'
-import { useAuth } from '../../hooks/auth'
 import { useModule } from '../../hooks/module'
 import { useSnack } from '../../hooks/snack'
 import api from '../../services/api'
@@ -128,9 +127,8 @@ const PayTableRequest: React.FC = () => {
 					payments: [...paymentMethods, { type: 5, value: payback }],
 					table_id,
 				})
-				console.log(data)
 			} else {
-				const { data } = await api.post('/cashier-moviments/finish-payment', {
+				await api.post('/cashier-moviments/finish-payment', {
 					payments: paymentMethods,
 					table_id,
 				})

@@ -100,7 +100,7 @@ const CloseCashier: React.FC = () => {
 				// })
 			}
 		},
-		[addSnack],
+		[addSnack, history],
 	)
 
 	return (

@@ -1,12 +1,5 @@
 import React, { useCallback } from 'react'
-import {
-	FiCoffee,
-	FiEdit,
-	FiEdit2,
-	FiEdit3,
-	FiInbox,
-	FiServer,
-} from 'react-icons/fi'
+import { FiCoffee, FiEdit, FiInbox, FiServer } from 'react-icons/fi'
 
 import { useHistory } from 'react-router-dom'
 import { Container, Profile, MenuList, MenuItem } from './styles'

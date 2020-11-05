@@ -1,5 +1,5 @@
 import { Form } from '@unform/web'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { useHistory } from 'react-router-dom'
