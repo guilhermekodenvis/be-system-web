@@ -6,6 +6,7 @@ import { Container, FAB, TableRequest, ButtonGroup } from './styles'
 
 import api from '../../services/api'
 import { useModule } from '../../hooks/module'
+import { useSnack } from '../../hooks/snack'
 
 interface TableRequest {
 	id: string
@@ -22,7 +23,7 @@ const Dashboard: React.FC = () => {
 	const [tableRequests, setTableRequests] = useState<TableRequest[]>()
 	const history = useHistory()
 	const { changeModule } = useModule()
-
+	const { addSnack } = useSnack()
 	useEffect(() => {
 		;(async () => {
 			const { data } = await api.get('/table-request/')

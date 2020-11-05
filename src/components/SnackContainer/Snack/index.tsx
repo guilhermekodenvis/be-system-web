@@ -1,5 +1,10 @@
 import React, { useEffect } from 'react'
-import { FiAlertCircle, FiCheckCircle, FiInfo, FiXCircle } from 'react-icons/fi'
+import {
+	FiAlertCircle,
+	FiAlertTriangle,
+	FiCheckCircle,
+	FiXCircle,
+} from 'react-icons/fi'
 
 import { SnackMessage, useSnack } from '../../../hooks/snack'
 
@@ -11,7 +16,7 @@ interface SnackProps {
 }
 
 const icons = {
-	warning: <FiInfo size={24} />,
+	warning: <FiAlertTriangle size={24} />,
 	danger: <FiAlertCircle size={24} />,
 	success: <FiCheckCircle size={24} />,
 }
@@ -35,7 +40,7 @@ const Snack: React.FC<SnackProps> = ({ message, style }) => {
 			hasDescription={Number(!!message.description)}
 			style={style}
 		>
-			{icons[message.type || 'warning']}
+			{icons[message.type || 'success']}
 
 			<div>
 				<strong>{message.title}</strong>
@@ -45,6 +50,7 @@ const Snack: React.FC<SnackProps> = ({ message, style }) => {
 			<button onClick={() => removeSnack(message.id)} type="button">
 				<FiXCircle size={18} />
 			</button>
+			<div className="timer"></div>
 		</Container>
 	)
 }
