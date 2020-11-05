@@ -144,7 +144,7 @@ const PayTableRequest: React.FC = () => {
 		} catch (err) {
 			console.log(err)
 		}
-	}, [payback, paymentMethods])
+	}, [addSnack, history, payback, paymentMethods, table_id])
 
 	return (
 		<Container>
