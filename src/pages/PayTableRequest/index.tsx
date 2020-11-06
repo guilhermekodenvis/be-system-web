@@ -145,6 +145,22 @@ const PayTableRequest: React.FC = () => {
 		}
 	}, [addSnack, history, payback, paymentMethods, table_id])
 
+	const namefyPaymentMethod = useCallback((paymentMethod: number) => {
+		switch (paymentMethod) {
+		case 1:
+			return 'Débito'
+			break
+		case 2:
+			return 'Crédito'
+			break
+		case 3:
+			return 'Dinheiro'
+			break
+		default:
+			return 'error'
+		}
+	}, [])
+
 	return (
 		<Container>
 			<Header>
@@ -206,8 +222,13 @@ const PayTableRequest: React.FC = () => {
 						{paymentMethods.map((paymentMethod, i) => {
 							return (
 								<li key={i}>
-									<p>{paymentMethod.value}</p>
-									<p>{paymentMethod.type}</p>
+									<p>
+										{new Intl.NumberFormat('pt-BR', {
+											style: 'currency',
+											currency: 'BRL',
+										}).format(paymentMethod.value)}
+									</p>
+									<p>{namefyPaymentMethod(paymentMethod.type)}</p>
 									<button onClick={() => handleDelete(i)}>
 										<FiTrash2 size={24} />
 									</button>
