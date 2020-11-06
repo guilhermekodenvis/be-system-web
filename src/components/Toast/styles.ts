@@ -11,7 +11,10 @@ export const Container = styled.div<ContainerProps>`
 		position: absolute;
 		bottom: -36px;
 		left: -36px;
-		width: 96px;
+		min-width: 118px;
+		width: auto;
+		padding-left: 12px;
+		padding-right: 12px;
 		height: 36px;
 		background: #10053e;
 		display: none;

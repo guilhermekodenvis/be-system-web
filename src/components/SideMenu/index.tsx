@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom'
 import { Container, Profile, MenuList, MenuItem } from './styles'
 
 import { useModule } from '../../hooks/module'
+import Toast from '../Toast'
 
 const SideMenu: React.FC = () => {
 	const { moduleName } = useModule()
@@ -18,6 +19,7 @@ const SideMenu: React.FC = () => {
 	const handleOpenProducts = useCallback(() => {
 		history.push('/produtos')
 	}, [history])
+
 	return (
 		<Container>
 			<Profile>
@@ -27,7 +29,9 @@ const SideMenu: React.FC = () => {
 							src="https://static-images.ifood.com.br/image/upload//capa/04c26c34-33c3-4e34-a861-0bc11c3eacf8/202005040942_uHie_@2x.jpeg"
 							alt="comidinhas vinhola"
 						/>
-						<FiEdit size={24} />
+						<Toast label="Editar perfil">
+							<FiEdit size={24} />
+						</Toast>
 					</div>
 					<strong>Comidinhas</strong>
 					<p>comidinhas@gmail.com</p>

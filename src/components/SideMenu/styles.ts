@@ -34,6 +34,7 @@ export const Profile = styled.div`
 
 			svg {
 				color: #4c60e6;
+				cursor: pointer;
 			}
 		}
 		strong {
