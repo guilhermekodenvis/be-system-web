@@ -4,6 +4,7 @@ import { FiPlusCircle, FiTrash2 } from 'react-icons/fi'
 import { useHistory, useParams } from 'react-router-dom'
 import Button from '../../components/Button'
 import Input from '../../components/Input'
+import SelectInput from '../../components/SelectInput'
 import { useModule } from '../../hooks/module'
 import { useSnack } from '../../hooks/snack'
 import api from '../../services/api'
@@ -179,7 +180,24 @@ const PayTableRequest: React.FC = () => {
 					</div>
 					<Form onSubmit={handleSubmit}>
 						<Input label="Valor" name="value" />
-						<Input label="" name="type" />
+						<SelectInput
+							data={[
+								{
+									label: 'Débito',
+									value: 1,
+								},
+								{
+									label: 'Crédito',
+									value: 2,
+								},
+								{
+									label: 'Dinheiro',
+									value: 3,
+								},
+							]}
+							name="type"
+							label="Método"
+						/>
 						<button type="submit">
 							<FiPlusCircle size={24} />
 						</button>

@@ -39,12 +39,7 @@ const Dashboard: React.FC = () => {
 			<p>Clique na mesa para ver os pedidos</p>
 			<div className="tables">
 				{tableRequests?.map((tableRequest, i) => (
-					<TableRequest
-						key={i}
-						// onClick={() => {
-						// 	history.push(`detalhes/${tableRequest.id}`)
-						// }}
-					>
+					<TableRequest key={i}>
 						<h2>Mesa {tableRequest.number}</h2>
 						<p>
 							Total:{' '}
