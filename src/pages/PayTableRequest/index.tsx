@@ -4,6 +4,7 @@ import { FiPlusCircle, FiTrash2 } from 'react-icons/fi'
 import { useHistory, useParams } from 'react-router-dom'
 import Button from '../../components/Button'
 import Input from '../../components/Input'
+import InputMoney from '../../components/InputMoney'
 import SelectInput from '../../components/SelectInput'
 import { useModule } from '../../hooks/module'
 import { useSnack } from '../../hooks/snack'
@@ -12,8 +13,8 @@ import api from '../../services/api'
 import { Container, Header, Body, Left, Right, PaymentList } from './styles'
 
 interface DataForm {
-	value: number
-	type: string
+	value: string
+	type: number
 }
 
 interface PaymentMethod {
@@ -47,8 +48,12 @@ const PayTableRequest: React.FC = () => {
 	}, [changeModule])
 
 	const handleSubmit = useCallback(({ value, type }: DataForm) => {
-		// console.log(data)
-		setPaymentMethods(prev => [...prev, { value, type: Number(type) }])
+		console.log(type)
+		const realValue = Number(value.replace(',', '.'))
+		setPaymentMethods(prev => [
+			...prev,
+			{ value: realValue, type: Number(type) },
+		])
 	}, [])
 
 	const handleDelete = useCallback((i: number) => {
@@ -147,17 +152,17 @@ const PayTableRequest: React.FC = () => {
 
 	const namefyPaymentMethod = useCallback((paymentMethod: number) => {
 		switch (paymentMethod) {
-		case 1:
-			return 'Débito'
-			break
-		case 2:
-			return 'Crédito'
-			break
-		case 3:
-			return 'Dinheiro'
-			break
-		default:
-			return 'error'
+			case 1:
+				return 'Débito'
+				break
+			case 2:
+				return 'Crédito'
+				break
+			case 3:
+				return 'Dinheiro'
+				break
+			default:
+				return 'error'
 		}
 	}, [])
 
@@ -195,7 +200,7 @@ const PayTableRequest: React.FC = () => {
 						/>
 					</div>
 					<Form onSubmit={handleSubmit}>
-						<Input label="Valor" name="value" />
+						<InputMoney label="Valor" name="value" />
 						<SelectInput
 							data={[
 								{
