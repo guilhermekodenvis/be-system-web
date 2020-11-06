@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { FiArrowLeft, FiTrash2, FiEdit3 } from 'react-icons/fi'
+import Toast from '../../components/Toast'
 import { useModule } from '../../hooks/module'
 import api from '../../services/api'
 
@@ -66,8 +67,14 @@ const Products: React.FC = () => {
 							<td>{product.category}</td>
 							<td>{product.priceFormatted}</td>
 							<ActionsGroup>
-								<FiEdit3 />
-								<FiTrash2 />
+								<div>
+									<Toast label="Editar">
+										<FiEdit3 color="#e6be4c" />
+									</Toast>
+									<Toast label="Excluir">
+										<FiTrash2 color="#d95267" />
+									</Toast>
+								</div>
 							</ActionsGroup>
 						</tr>
 					))}

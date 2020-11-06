@@ -95,18 +95,18 @@ export const Table = styled.table`
 export const ActionsGroup = styled.td`
 	align-items: center;
 	max-width: 15px;
+	padding-bottom: 16px;
+	> div {
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+		flex: 1;
+	}
 
 	svg {
 		width: 24px;
 		height: 24px;
 		margin: 0 12px;
 		cursor: pointer;
-
-		&:first-child {
-			color: #e6be4c;
-		}
-		&:last-child {
-			color: #d95267;
-		}
 	}
 `
