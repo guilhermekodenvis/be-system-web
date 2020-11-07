@@ -4,8 +4,7 @@ export const Container = styled.div`
 	width: 960px;
 	height: auto;
 	margin: 36px auto;
-	background: #261b51;
-	box-shadow: 0px 3px 12px 2px rgba(0, 0, 0, 0.25);
+	background: #382e63;
 	border-radius: 12px;
 
 	form {

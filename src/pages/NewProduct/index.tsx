@@ -12,6 +12,8 @@ import getValidationErrors from '../../utils/getValidationErrors'
 
 import { Container, Header } from './styles'
 import { useModule } from '../../hooks/module'
+import PageHeader from '../../components/PageHeader'
+import InputMoney from '../../components/InputMoney'
 
 interface FormNewProductData {
 	name: string
@@ -84,39 +86,35 @@ const NewProduct: React.FC = () => {
 		console.log('cacelou')
 	}, [])
 	return (
-		<Container>
-			<Header>
-				<div>
-					<h1>Cadastrar Produto</h1>
-					<button>
-						<FiArrowLeft /> VOLTAR
-					</button>
-				</div>
-				<p>Adicione um novo produto à sua lista</p>
-			</Header>
-			<Form onSubmit={handleSubmit} ref={formRef}>
-				<Input label="Nome" name="name" />
-				<Input label="Categoria" name="category" />
-				<Input label="Preço" name="price" />
-				<Input label="Ingredientes" name="ingredients" />
-				<Input label="Descrição" name="description" />
-				<div className="button-group">
-					<Button
-						label="Cancelar"
-						variant="secundary"
-						size="normal"
-						type="button"
-						onClick={handleClickCancel}
-					/>
-					<Button
-						label="Salvar"
-						variant="primary"
-						size="normal"
-						type="submit"
-					/>
-				</div>
-			</Form>
-		</Container>
+		<>
+			<PageHeader
+				title="Cadastrar produto"
+				description="Adicione um novo produto à sua lista"
+			/>
+			<Container>
+				<Form onSubmit={handleSubmit} ref={formRef}>
+					<Input label="Nome" name="name" />
+					<Input label="Categoria" name="category" />
+					<InputMoney label="Preço" name="price" />
+					{/* <Input label="Ingredientes" name="ingredients" /> */}
+					<div className="button-group">
+						<Button
+							label="Cancelar"
+							variant="secundary"
+							size="normal"
+							type="button"
+							onClick={handleClickCancel}
+						/>
+						<Button
+							label="Salvar"
+							variant="primary"
+							size="normal"
+							type="submit"
+						/>
+					</div>
+				</Form>
+			</Container>
+		</>
 	)
 }
 

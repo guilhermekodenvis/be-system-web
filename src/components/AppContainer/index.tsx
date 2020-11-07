@@ -8,7 +8,7 @@ import SideMenu from '../SideMenu'
 
 const AppContainer: React.FC = ({ children }) => {
 	const history = useHistory()
-	const [menuOpen, setMenuOpen] = useState(true)
+	const [menuOpen, setMenuOpen] = useState(false)
 
 	const handleClickTitle = () => {
 		history.push('/')

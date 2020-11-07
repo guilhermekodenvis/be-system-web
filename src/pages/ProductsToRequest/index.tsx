@@ -210,7 +210,7 @@ const ProductsToRequest: React.FC = () => {
 				cliente e envie o pedido para a cozinha."
 			/>
 			<Container>
-				<div>
+				<div className="total">
 					<strong>
 						Total: <span>{finalPrice}</span>
 					</strong>

@@ -6,6 +6,14 @@ export const Container = styled.div`
 	padding: 12px;
 	position: relative;
 
+	@media (min-width: 420px) {
+		display: grid;
+		grid-template-areas:
+			'total bt'
+			'categories categories'
+			'list list';
+	}
+
 	h1 {
 		font-size: 32px;
 		margin-top: 12px;
@@ -23,10 +31,23 @@ export const Container = styled.div`
 		}
 	}
 
+	.total {
+		@media (min-width: 420px) {
+			grid-area: total;
+			padding-bottom: 12px;
+		}
+	}
+
 	.products-list {
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: space-between;
+		padding-bottom: 120px;
+
+		@media (min-width: 420px) {
+			padding-bottom: 12px;
+			grid-area: list;
+		}
 	}
 
 	.bt-send-to-kitchen {
@@ -35,6 +56,14 @@ export const Container = styled.div`
 		position: fixed;
 		bottom: 0;
 		left: 0;
+		background: #1f1449;
+
+		@media (min-width: 420px) {
+			position: relative;
+			grid-area: bt;
+			width: 240px;
+			margin-left: auto;
+		}
 	}
 `
 
@@ -110,13 +139,12 @@ export const BottomNavigation = styled.div`
 
 	ul {
 		min-width: 100%;
-		overflow-y: scroll;
 		list-style: none;
 		display: flex;
 		align-items: center;
 		white-space: nowrap;
 		height: 48px;
-
+		overflow-y: scroll;
 		li {
 			padding: 12px 24px;
 			display: inline;
@@ -126,11 +154,24 @@ export const BottomNavigation = styled.div`
 			letter-spacing: 1px;
 			transition: 0.2s;
 			cursor: pointer;
+			text-align: center;
 
 			&.active {
 				border-bottom: 6px solid #e36414;
 				font-weight: bold;
 			}
+		}
+	}
+
+	@media (min-width: 420px) {
+		position: relative;
+		bottom: 0;
+		grid-area: categories;
+
+		filter: none;
+
+		ul {
+			overflow-y: hidden;
 		}
 	}
 `
