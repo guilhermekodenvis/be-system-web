@@ -4,13 +4,25 @@ interface MenuItemProps {
 	active?: boolean
 }
 
-export const Container = styled.aside`
+interface ContainerProps {
+	open: boolean
+}
+
+export const Container = styled.aside<ContainerProps>`
 	background: #382e63;
-	width: 288px;
 	height: max(calc(100vh - 72px), 100%);
 	grid-area: sidemenu;
 	z-index: 0;
-	/* position: fixed; */
+
+	${props => {
+		return props.open
+			? css`
+					display: auto;
+			  `
+			: css`
+					display: none;
+			  `
+	}}/* position: fixed; */
 `
 
 export const Profile = styled.div`

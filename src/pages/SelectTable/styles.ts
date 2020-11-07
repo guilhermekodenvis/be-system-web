@@ -36,7 +36,6 @@ export const Container = styled.div`
 			}
 			button {
 				position: unset;
-				/* float: right; */
 				width: 136px;
 				display: block;
 				margin-left: auto;

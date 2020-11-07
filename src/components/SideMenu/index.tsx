@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { FiCoffee, FiEdit, FiInbox, FiServer } from 'react-icons/fi'
 
 import { useHistory } from 'react-router-dom'
@@ -7,7 +7,11 @@ import { Container, Profile, MenuList, MenuItem } from './styles'
 import { useModule } from '../../hooks/module'
 import Toast from '../Toast'
 
-const SideMenu: React.FC = () => {
+interface SideMenuProps {
+	open: boolean
+}
+
+const SideMenu: React.FC<SideMenuProps> = ({ open }) => {
 	const { moduleName } = useModule()
 	const history = useHistory()
 	const handleOpenRequests = useCallback(() => {
@@ -20,8 +24,12 @@ const SideMenu: React.FC = () => {
 		history.push('/produtos')
 	}, [history])
 
+	useEffect(() => {
+		console.log(open)
+	}, [open])
+
 	return (
-		<Container>
+		<Container open={open}>
 			<Profile>
 				<div>
 					<div className="top">
