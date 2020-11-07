@@ -10,6 +10,7 @@ import getValidationErrors from '../../utils/getValidationErrors'
 import { Container } from './styles'
 import api from '../../services/api'
 import { useModule } from '../../hooks/module'
+import PageHeader from '../../components/PageHeader'
 
 interface ContinueToRequestFormData {
 	table_number: string
@@ -64,14 +65,18 @@ const SelectTable: React.FC = () => {
 		[history],
 	)
 	return (
-		<Container>
-			<h1>Novo pedido</h1>
-			<p>Indique a mesa para continuar.</p>
-			<Form onSubmit={handleSubmit} ref={formRef}>
-				<Input label="Número da mesa" name="table_number" />
-				<Button label="continuar" size="big" type="submit" />
-			</Form>
-		</Container>
+		<>
+			<PageHeader
+				title="Novo pedido"
+				description="Indique a mesa para continuar."
+			/>
+			<Container>
+				<Form onSubmit={handleSubmit} ref={formRef}>
+					<Input label="Número da mesa" name="table_number" />
+					<Button label="continuar" size="big" type="submit" />
+				</Form>
+			</Container>
+		</>
 	)
 }
 
