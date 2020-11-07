@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom'
 import * as Yup from 'yup'
 import Button from '../../components/Button'
 import Input from '../../components/Input'
+import PageHeader from '../../components/PageHeader'
 import { useModule } from '../../hooks/module'
 import { useSnack } from '../../hooks/snack'
 import api from '../../services/api'
@@ -105,10 +106,10 @@ const CloseCashier: React.FC = () => {
 
 	return (
 		<>
-			<Header>
-				<h1>Fechar o caixa</h1>
-				<p>Confirme toda a movimentação e feche o caixa.</p>
-			</Header>
+			<PageHeader
+				title="Fechar o caixa"
+				description="Confirme toda a movimentação e feche o caixa."
+			/>
 			<Container>
 				<div>
 					<Details>

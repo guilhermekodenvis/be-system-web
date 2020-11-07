@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { FiDollarSign, FiList, FiPlus, FiShoppingCart } from 'react-icons/fi'
 import { useHistory } from 'react-router-dom'
-import { Container, FAB, TableRequest, ButtonGroup } from './styles'
+import { Container, FAB, TableRequest, ButtonGroup, DashEmpty } from './styles'
 
 import api from '../../services/api'
 import { useModule } from '../../hooks/module'
@@ -38,6 +38,11 @@ const Dashboard: React.FC = () => {
 			<h1>Pedidos em aberto</h1>
 			<p>Clique na mesa para ver os pedidos</p>
 			<div className="tables">
+				{tableRequests?.length === 0 && (
+					<DashEmpty>
+						<h2>Parece que não há nenhuma mesa ocupada no momento...</h2>
+					</DashEmpty>
+				)}
 				{tableRequests?.map((tableRequest, i) => (
 					<TableRequest key={i}>
 						<h2>Mesa {tableRequest.number}</h2>

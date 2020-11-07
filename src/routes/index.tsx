@@ -18,6 +18,7 @@ import TableRequestDetails from '../pages/TableRequestDetails'
 import SelectTable from '../pages/SelectTable'
 import PayTableRequest from '../pages/PayTableRequest'
 import CloseCashier from '../pages/CloseCashier'
+import Cashier from '../pages/Cashier'
 
 const Routes: React.FC = () => (
 	<Switch>
@@ -47,6 +48,7 @@ const Routes: React.FC = () => (
 				component={PayTableRequest}
 				isPrivate
 			/>
+			<Route exact path="/caixa" component={Cashier} isPrivate />
 			<Route exact path="/abrir-caixa" component={OpenCashier} isPrivate />
 			<Route exact path="/fechar-caixa" component={CloseCashier} isPrivate />
 		</AppContainer>

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { FiArrowLeft, FiTrash2, FiEdit3 } from 'react-icons/fi'
+import { FiTrash2, FiEdit3 } from 'react-icons/fi'
+import PageHeader from '../../components/PageHeader'
 import Toast from '../../components/Toast'
 import { useModule } from '../../hooks/module'
 import api from '../../services/api'
 
-import { Container, Header, Table, ActionsGroup } from './styles'
+import { Table, ActionsGroup } from './styles'
 
 interface Product {
 	id: string
@@ -40,17 +41,10 @@ const Products: React.FC = () => {
 	}, [])
 	return (
 		<>
-			<Container>
-				<Header>
-					<div>
-						<h1>Meus produtos</h1>
-						<button>
-							<FiArrowLeft /> VOLTAR
-						</button>
-					</div>
-					<p>Visualize sua lista de produtos</p>
-				</Header>
-			</Container>
+			<PageHeader
+				title="Meus produtos"
+				description="Essa é sua lista de produtos, edite, delete ou insira novos."
+			/>
 			<Table>
 				<thead>
 					<tr>

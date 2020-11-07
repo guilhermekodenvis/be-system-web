@@ -19,7 +19,7 @@ export const Container = styled.div`
 		align-items: center;
 
 		p {
-			width: 25%;
+			width: 48px;
 			padding-left: 12px;
 			border-right: 1px solid #e9e3ff;
 		}
@@ -28,7 +28,7 @@ export const Container = styled.div`
 			color: #e9e3ff;
 			padding: 12px;
 			background: transparent;
-			width: 75%;
+			width: calc(100% - 48px);
 			border: none;
 			/* transition: 0.2s ease; */
 		}

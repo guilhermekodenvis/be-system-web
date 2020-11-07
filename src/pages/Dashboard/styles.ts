@@ -7,7 +7,7 @@ export const Container = styled.div`
 
 	h1 {
 		font-size: 32px;
-		margin-top: 12px;
+		margin-top: 24px;
 	}
 
 	.tables {
@@ -87,4 +87,12 @@ export const ButtonGroup = styled.div`
 			color: #e9e3ff;
 		}
 	}
+`
+
+export const DashEmpty = styled.div`
+	height: 360px;
+	display: flex;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
 `

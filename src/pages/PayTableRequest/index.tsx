@@ -44,6 +44,20 @@ const PayTableRequest: React.FC = () => {
 	const history = useHistory()
 
 	useEffect(() => {
+		;(async () => {
+			const { data } = await api.get('/cashier-moviments/situation')
+			if (!data.isOpen) {
+				history.push('/abrir-caixa')
+				addSnack({
+					title: 'Atenção!',
+					description: 'O caixa precisa estar aberto para anotar pagamentos.',
+					type: 'warning',
+				})
+			}
+		})()
+	}, [addSnack, history])
+
+	useEffect(() => {
 		changeModule('cashier')
 	}, [changeModule])
 

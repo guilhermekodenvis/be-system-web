@@ -14,7 +14,7 @@ const SideMenu: React.FC = () => {
 		history.push('/')
 	}, [history])
 	const handleOpenCashierPage = useCallback(() => {
-		history.push('/abrir-caixa')
+		history.push('/caixa')
 	}, [history])
 	const handleOpenProducts = useCallback(() => {
 		history.push('/produtos')
