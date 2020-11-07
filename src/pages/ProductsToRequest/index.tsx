@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FiMinus, FiPlus } from 'react-icons/fi'
 import { useHistory, useParams } from 'react-router-dom'
 import Button from '../../components/Button'
+import PageHeader from '../../components/PageHeader'
 import { useModule } from '../../hooks/module'
 import { useSnack } from '../../hooks/snack'
 import api from '../../services/api'
@@ -202,37 +203,39 @@ const ProductsToRequest: React.FC = () => {
 	}, [productsInCart])
 
 	return (
-		<Container>
-			<h1>Anotar pedido</h1>
-			<p>
-				Clique no produto para anotar. Selecione a quantidade desejada pelo
-				cliente e envie o pedido para a cozinha.
-			</p>
-			<div>
-				<strong>
-					Total: <span>{finalPrice}</span>
-				</strong>
-				<Button
-					disabled
-					label="Detalhes"
-					variant="secundary-outline"
-					onClick={() => history.push('/detalhes-do-pedido')}
-				/>
-			</div>
-			<div className="products-list">{productList}</div>
+		<>
+			<PageHeader
+				title="Anotar pedido"
+				description="Clique no produto para anotar. Selecione a quantidade desejada pelo
+				cliente e envie o pedido para a cozinha."
+			/>
+			<Container>
+				<div>
+					<strong>
+						Total: <span>{finalPrice}</span>
+					</strong>
+					<Button
+						disabled
+						label="Detalhes"
+						variant="secundary-outline"
+						onClick={() => history.push('/detalhes-do-pedido')}
+					/>
+				</div>
+				<div className="products-list">{productList}</div>
 
-			<BottomNavigation>
-				<ul>{categories}</ul>
-			</BottomNavigation>
-			<div className="bt-send-to-kitchen">
-				<Button
-					variant="primary"
-					size="big"
-					label="Enviar para cozinha"
-					onClick={handleClickSendToKitchen}
-				/>
-			</div>
-		</Container>
+				<BottomNavigation>
+					<ul>{categories}</ul>
+				</BottomNavigation>
+				<div className="bt-send-to-kitchen">
+					<Button
+						variant="primary"
+						size="big"
+						label="Enviar para cozinha"
+						onClick={handleClickSendToKitchen}
+					/>
+				</div>
+			</Container>
+		</>
 	)
 }
 

@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
-	padding: 26px 92px;
+	padding: 24px 84px;
 	display: flex;
 	flex-direction: column;
 	width: 776px;
@@ -30,6 +30,15 @@ export const Container = styled.div`
 				width: 24px;
 				height: 24px;
 			}
+		}
+	}
+
+	@media (max-width: 420px) {
+		/* background-color: black; */
+		width: 100vw;
+		padding: 0 12px;
+		h1 {
+			font-size: 32px;
 		}
 	}
 `

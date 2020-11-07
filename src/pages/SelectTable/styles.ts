@@ -6,17 +6,15 @@ export const Container = styled.div`
 	padding: 12px;
 	flex: 1;
 	border-radius: 12px;
-	width: 998px;
-	margin: 0 auto;
-	padding-top: 24px;
+	width: calc(100% -12px);
+	margin: 12px;
 	h1 {
 		font-size: 32px;
 		margin-top: 12px;
 	}
 
 	form {
-		margin-top: 48px;
-
+		padding-top: 24px;
 		button {
 			position: fixed;
 			bottom: 0;
@@ -26,7 +24,7 @@ export const Container = styled.div`
 		}
 	}
 
-	@media (min-width: 410px) {
+	@media (min-width: 420px) {
 		form {
 			width: 720px;
 			margin: 0 auto;
