@@ -42,8 +42,6 @@ const OpenCashier: React.FC = () => {
 					description: 'O caixa está aberto.',
 				})
 
-				console.log(resp.data)
-
 				history.push('/')
 			} catch (err) {
 				console.log(err)

@@ -24,10 +24,6 @@ const SideMenu: React.FC<SideMenuProps> = ({ open }) => {
 		history.push('/produtos')
 	}, [history])
 
-	useEffect(() => {
-		console.log(open)
-	}, [open])
-
 	return (
 		<Container open={open}>
 			<Profile>

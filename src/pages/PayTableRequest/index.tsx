@@ -62,7 +62,6 @@ const PayTableRequest: React.FC = () => {
 	}, [changeModule])
 
 	const handleSubmit = useCallback(({ value, type }: DataForm) => {
-		console.log(type)
 		const realValue = Number(value.replace(',', '.'))
 		setPaymentMethods(prev => [
 			...prev,
@@ -82,7 +81,6 @@ const PayTableRequest: React.FC = () => {
 		;(async () => {
 			const { data } = await api.get(`/table-request/${table_id}`)
 			setTableRequest(data)
-			// console.log(data)
 		})()
 	}, [table_id])
 
@@ -140,7 +138,6 @@ const PayTableRequest: React.FC = () => {
 	}, [payback])
 
 	const handleClickCloseRequest = useCallback(async () => {
-		// console.log(payback, paymentMethods)
 		try {
 			if (payback > 0) {
 				await api.post('/cashier-moviments/finish-payment', {
@@ -166,17 +163,17 @@ const PayTableRequest: React.FC = () => {
 
 	const namefyPaymentMethod = useCallback((paymentMethod: number) => {
 		switch (paymentMethod) {
-			case 1:
-				return 'Débito'
-				break
-			case 2:
-				return 'Crédito'
-				break
-			case 3:
-				return 'Dinheiro'
-				break
-			default:
-				return 'error'
+		case 1:
+			return 'Débito'
+			break
+		case 2:
+			return 'Crédito'
+			break
+		case 3:
+			return 'Dinheiro'
+			break
+		default:
+			return 'error'
 		}
 	}, [])
 

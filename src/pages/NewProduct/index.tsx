@@ -53,8 +53,6 @@ const NewProduct: React.FC = () => {
 					description: 'O produto foi adicionado.',
 				})
 
-				console.log(resp.data)
-
 				history.push('/produtos')
 			} catch (err) {
 				if (err instanceof Yup.ValidationError) {

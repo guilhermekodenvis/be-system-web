@@ -15,7 +15,6 @@ const Cashier: React.FC = () => {
 				} else {
 					history.push('fechar-caixa')
 				}
-				console.log(data)
 			} catch (err) {
 				console.log(err)
 			}

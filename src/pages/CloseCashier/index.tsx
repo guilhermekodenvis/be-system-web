@@ -37,7 +37,7 @@ const CloseCashier: React.FC = () => {
 				const { data } = await api.get('/cashier-moviments')
 				setCashierMoviments(data)
 			} catch (err) {
-				console.log(err.message)
+				console.log(err)
 			}
 		})()
 
@@ -45,7 +45,6 @@ const CloseCashier: React.FC = () => {
 	}, [changeModule])
 
 	const cashierMovimentsElement = useMemo(() => {
-		console.log(cashierMoviments)
 		return cashierMoviments.map((cashierMoviment, i) => {
 			return (
 				<tr key={i}>
@@ -74,8 +73,6 @@ const CloseCashier: React.FC = () => {
 					title: 'Sucesso!',
 					description: 'O agora o caixa está fechado.',
 				})
-
-				console.log(resp.data)
 
 				history.push('/')
 			} catch (err) {

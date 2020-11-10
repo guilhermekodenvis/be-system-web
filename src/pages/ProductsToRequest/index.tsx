@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FiMinus, FiPlus } from 'react-icons/fi'
 import { useHistory, useParams } from 'react-router-dom'
+import download from 'downloadjs'
+import printJS from 'print-js'
 import Button from '../../components/Button'
 import PageHeader from '../../components/PageHeader'
 import { useModule } from '../../hooks/module'
@@ -95,24 +97,20 @@ const ProductsToRequest: React.FC = () => {
 	}, [])
 
 	const handleClickSendToKitchen = useCallback(async () => {
-		const { data } = await api.post('/table-request/add-products', {
+		const response = await api.post('/table-request/add-products', {
 			products: [...productsInCart],
 			table_id,
 		})
-		if (data) {
+		if (response) {
 			addSnack({
 				title: 'Pronto!',
 				description: 'O pedido foi enviado para a cozinha',
 				type: 'success',
 			})
 			history.push('/')
+			printJS(response.data.download)
 		}
-		// console.log(data)
 	}, [addSnack, history, productsInCart, table_id])
-
-	useEffect(() => {
-		console.log(productsInCart)
-	}, [productsInCart])
 
 	useEffect(() => {
 		;(async () => {

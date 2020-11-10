@@ -7,6 +7,7 @@ import { Container, FAB, TableRequest, ButtonGroup, DashEmpty } from './styles'
 import api from '../../services/api'
 import { useModule } from '../../hooks/module'
 import { useSnack } from '../../hooks/snack'
+import Toast from '../../components/Toast'
 
 interface TableRequest {
 	id: string
@@ -27,7 +28,6 @@ const Dashboard: React.FC = () => {
 	useEffect(() => {
 		;(async () => {
 			const { data } = await api.get('/table-request/')
-			console.log(data)
 			setTableRequests(data)
 		})()
 		changeModule('requests')
@@ -59,6 +59,7 @@ const Dashboard: React.FC = () => {
 							)}
 						</p>
 						<ButtonGroup>
+							{/* <Toast label="Detalhes do pedido"> */}
 							<button
 								onClick={() =>
 									history.push(`detalhes-do-pedido/${tableRequest.id}`)
@@ -66,6 +67,8 @@ const Dashboard: React.FC = () => {
 							>
 								<FiList size={24} />
 							</button>
+							{/* </Toast> */}
+							{/* <Toast label="Anotar"> */}
 							<button
 								onClick={() =>
 									history.push(`adicionar-produto/${tableRequest.id}`)
@@ -73,11 +76,14 @@ const Dashboard: React.FC = () => {
 							>
 								<FiShoppingCart size={24} />
 							</button>
+							{/* </Toast> */}
+							{/* <Toast label="Pagar"> */}
 							<button
 								onClick={() => history.push(`finalizar/${tableRequest.id}`)}
 							>
 								<FiDollarSign size={24} />
 							</button>
+							{/* </Toast> */}
 						</ButtonGroup>
 					</TableRequest>
 				))}
