@@ -48,6 +48,12 @@ const Register: React.FC = () => {
 					abortEarly: false,
 				})
 
+				console.log('data', data)
+
+				// console.log(api.))
+				// eslint-disable-next-line no-param-reassign
+				delete data.password_confirm
+
 				await api.post('/users', data)
 
 				history.push('/login')
