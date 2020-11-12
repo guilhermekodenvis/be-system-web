@@ -1,17 +1,13 @@
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import React, { useCallback, useEffect, useRef } from 'react'
-import { FiArrowLeft } from 'react-icons/fi'
 import { useHistory } from 'react-router-dom'
-import * as Yup from 'yup'
 import Button from '../../components/Button'
-import Input from '../../components/Input'
 import InputMoney from '../../components/InputMoney'
 import PageHeader from '../../components/PageHeader'
 import { useModule } from '../../hooks/module'
 import { useSnack } from '../../hooks/snack'
 import api from '../../services/api'
-import getValidationErrors from '../../utils/getValidationErrors'
 
 import { Container } from './styles'
 
@@ -32,7 +28,7 @@ const OpenCashier: React.FC = () => {
 			}
 
 			try {
-				const resp = await api.post('/cashier-moviments/open', {
+				await api.post('/cashier-moviments/open', {
 					value: formattedNumber,
 				})
 

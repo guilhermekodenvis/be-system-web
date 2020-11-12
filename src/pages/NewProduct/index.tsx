@@ -1,7 +1,6 @@
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import React, { useCallback, useEffect, useRef } from 'react'
-import { FiArrowLeft } from 'react-icons/fi'
 import * as Yup from 'yup'
 import { useHistory } from 'react-router-dom'
 import Button from '../../components/Button'
@@ -10,7 +9,7 @@ import { useSnack } from '../../hooks/snack'
 import api from '../../services/api'
 import getValidationErrors from '../../utils/getValidationErrors'
 
-import { Container, Header } from './styles'
+import { Container } from './styles'
 import { useModule } from '../../hooks/module'
 import PageHeader from '../../components/PageHeader'
 import InputMoney from '../../components/InputMoney'
@@ -46,7 +45,7 @@ const NewProduct: React.FC = () => {
 					abortEarly: false,
 				})
 
-				const resp = await api.post('/products', data)
+				await api.post('/products', data)
 				addSnack({
 					type: 'success',
 					title: 'Sucesso!',

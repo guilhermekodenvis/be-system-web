@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback } from 'react'
 import { FiCoffee, FiEdit, FiInbox, FiServer } from 'react-icons/fi'
 
 import { useHistory } from 'react-router-dom'

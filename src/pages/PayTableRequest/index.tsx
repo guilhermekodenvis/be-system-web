@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FiPlusCircle, FiTrash2 } from 'react-icons/fi'
 import { useHistory, useParams } from 'react-router-dom'
 import Button from '../../components/Button'
-import Input from '../../components/Input'
 import InputMoney from '../../components/InputMoney'
 import SelectInput from '../../components/SelectInput'
 import { useModule } from '../../hooks/module'
@@ -163,17 +162,17 @@ const PayTableRequest: React.FC = () => {
 
 	const namefyPaymentMethod = useCallback((paymentMethod: number) => {
 		switch (paymentMethod) {
-		case 1:
-			return 'Débito'
-			break
-		case 2:
-			return 'Crédito'
-			break
-		case 3:
-			return 'Dinheiro'
-			break
-		default:
-			return 'error'
+			case 1:
+				return 'Débito'
+				break
+			case 2:
+				return 'Crédito'
+				break
+			case 3:
+				return 'Dinheiro'
+				break
+			default:
+				return 'error'
 		}
 	}, [])
 

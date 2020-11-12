@@ -41,11 +41,6 @@ export const Details = styled.div`
 	}
 `
 
-export const Header = styled.div`
-	width: 776px;
-	margin: 36px auto 48px;
-`
-
 export const Relatory = styled.div`
 	h2 {
 		margin: 36px auto 24px 24px;

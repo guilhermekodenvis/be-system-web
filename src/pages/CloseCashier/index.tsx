@@ -11,7 +11,7 @@ import { useSnack } from '../../hooks/snack'
 import api from '../../services/api'
 import getValidationErrors from '../../utils/getValidationErrors'
 
-import { Container, Details, Header, Relatory } from './styles'
+import { Container, Details, Relatory } from './styles'
 
 interface FormData {
 	observation: string
@@ -67,7 +67,7 @@ const CloseCashier: React.FC = () => {
 					abortEarly: false,
 				})
 
-				const resp = await api.post('/cashier-moviments/close', data)
+				await api.post('/cashier-moviments/close', data)
 				addSnack({
 					type: 'success',
 					title: 'Sucesso!',

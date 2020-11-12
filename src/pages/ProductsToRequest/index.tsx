@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FiMinus, FiPlus } from 'react-icons/fi'
 import { useHistory, useParams } from 'react-router-dom'
-import download from 'downloadjs'
 import printJS from 'print-js'
 import Button from '../../components/Button'
 import PageHeader from '../../components/PageHeader'
