@@ -161,19 +161,16 @@ const PayTableRequest: React.FC = () => {
 	}, [addSnack, history, payback, paymentMethods, table_id])
 
 	const namefyPaymentMethod = useCallback((paymentMethod: number) => {
-		switch (paymentMethod) {
-			case 1:
-				return 'Débito'
-				break
-			case 2:
-				return 'Crédito'
-				break
-			case 3:
-				return 'Dinheiro'
-				break
-			default:
-				return 'error'
+		if (paymentMethod === 1) {
+			return 'Débito'
 		}
+		if (paymentMethod === 2) {
+			return 'Crédito'
+		}
+		if (paymentMethod === 3) {
+			return 'Dinheiro'
+		}
+		return 'error'
 	}, [])
 
 	return (
