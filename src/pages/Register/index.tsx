@@ -50,11 +50,15 @@ const Register: React.FC = () => {
 
 				console.log('data', data)
 
-				// console.log(api.))
-				// eslint-disable-next-line no-param-reassign
-				delete data.password_confirm
+				const dataToSend = {
+					user_name: data.user_name,
+					restaurant_name: data.restaurant_name,
+					password: data.password,
+					email: data.email,
+					cnpj: data.cnpj,
+				}
 
-				await api.post('/users', data)
+				await api.post('/users', dataToSend)
 
 				history.push('/login')
 			} catch (err) {
