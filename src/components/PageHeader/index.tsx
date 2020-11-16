@@ -7,17 +7,24 @@ import { Container } from './styles'
 interface PageHeaderProps {
 	title: string
 	description?: string
+	noBackButton?: boolean
 }
 
-const PageHeader: React.FC<PageHeaderProps> = ({ title, description }) => {
+const PageHeader: React.FC<PageHeaderProps> = ({
+	title,
+	description,
+	noBackButton,
+}) => {
 	const history = useHistory()
 	return (
 		<Container>
 			<div>
 				<h1>{title}</h1>
-				<button onClick={e => history.goBack()}>
-					<FiArrowLeft /> VOLTAR
-				</button>
+				{!noBackButton && (
+					<button onClick={e => history.goBack()}>
+						<FiArrowLeft /> VOLTAR
+					</button>
+				)}
 			</div>
 			<p>{description}</p>
 		</Container>

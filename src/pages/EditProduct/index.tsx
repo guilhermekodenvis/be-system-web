@@ -53,11 +53,11 @@ const EditProduct: React.FC = () => {
 					abortEarly: false,
 				})
 
-				await api.post('/products', data)
+				await api.put(`/products/${product_id}`, data)
 				addSnack({
 					type: 'success',
 					title: 'Sucesso!',
-					description: 'O produto foi adicionado.',
+					description: 'O produto foi editado.',
 				})
 
 				history.push('/produtos')

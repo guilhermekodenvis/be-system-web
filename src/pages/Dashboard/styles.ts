@@ -73,7 +73,7 @@ export const ButtonGroup = styled.div`
 		}
 
 		&:last-child {
-			background: #e6be4c;
+			background: #e6be4c !important;
 			&:hover {
 				background: ${shade(0.2, '#E6BE4C')};
 			}

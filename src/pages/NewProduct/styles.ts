@@ -12,6 +12,10 @@ export const Container = styled.div`
 		margin: 0 auto;
 		padding: 48px 0;
 
+		#category {
+			max-width: 360px;
+		}
+
 		.button-group {
 			display: flex;
 			justify-content: flex-end;

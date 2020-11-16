@@ -9,9 +9,9 @@ export const Container = styled.div<ContainerProps>`
 
 	div {
 		position: absolute;
-		bottom: -36px;
-		left: -36px;
-		min-width: 118px;
+		bottom: -48px;
+		left: -48px;
+		min-width: 132px;
 		width: auto;
 		padding-left: 12px;
 		padding-right: 12px;

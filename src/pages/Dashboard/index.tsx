@@ -7,6 +7,8 @@ import { Container, FAB, TableRequest, ButtonGroup, DashEmpty } from './styles'
 import api from '../../services/api'
 import { useModule } from '../../hooks/module'
 import { useSnack } from '../../hooks/snack'
+import PageHeader from '../../components/PageHeader'
+import Toast from '../../components/Toast'
 
 interface TableRequest {
 	id: string
@@ -61,8 +63,11 @@ const Dashboard: React.FC = () => {
 
 	return (
 		<Container>
-			<h1>Pedidos em aberto</h1>
-			<p>Clique na mesa para ver os pedidos</p>
+			<PageHeader
+				title="Pedidos em aberto"
+				description="Clique na mesa para ver os pedidos"
+				noBackButton
+			/>
 			<div className="tables">
 				{tableRequests?.length === 0 && (
 					<DashEmpty>
@@ -89,31 +94,31 @@ const Dashboard: React.FC = () => {
 							)}
 						</p>
 						<ButtonGroup>
-							{/* <Toast label="Detalhes do pedido"> */}
 							<button
 								onClick={() =>
 									history.push(`detalhes-do-pedido/${tableRequest.id}`)
 								}
 							>
-								<FiList size={24} />
+								<Toast label="Detalhes">
+									<FiList size={24} />
+								</Toast>
 							</button>
-							{/* </Toast> */}
-							{/* <Toast label="Anotar"> */}
 							<button
 								onClick={() =>
 									history.push(`adicionar-produto/${tableRequest.id}`)
 								}
 							>
-								<FiShoppingCart size={24} />
+								<Toast label="Anotar">
+									<FiShoppingCart size={24} />
+								</Toast>
 							</button>
-							{/* </Toast> */}
-							{/* <Toast label="Pagar"> */}
 							<button
 								onClick={() => history.push(`finalizar/${tableRequest.id}`)}
 							>
-								<FiDollarSign size={24} />
+								<Toast label="Pagar">
+									<FiDollarSign size={24} />
+								</Toast>
 							</button>
-							{/* </Toast> */}
 						</ButtonGroup>
 					</TableRequest>
 				))}
