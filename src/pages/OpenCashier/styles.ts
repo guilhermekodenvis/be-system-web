@@ -23,5 +23,9 @@ export const Container = styled.div`
 				margin-right: 24px;
 			}
 		}
+
+		input:last-child {
+			width: 360px;
+		}
 	}
 `

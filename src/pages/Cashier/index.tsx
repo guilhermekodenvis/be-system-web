@@ -10,6 +10,7 @@ const Cashier: React.FC = () => {
 		;(async () => {
 			try {
 				const { data } = await api.get('/cashier-moviments/situation')
+				console.log(data)
 				if (!data.isOpen) {
 					history.push('abrir-caixa')
 				} else {

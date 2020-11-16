@@ -3,6 +3,7 @@ import { Form } from '@unform/web'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { useHistory } from 'react-router-dom'
 import Button from '../../components/Button'
+import Input from '../../components/Input'
 import InputMoney from '../../components/InputMoney'
 import PageHeader from '../../components/PageHeader'
 import { useModule } from '../../hooks/module'
@@ -13,6 +14,7 @@ import { Container } from './styles'
 
 interface DataOpenCashier {
 	value: string
+	password: string
 }
 const OpenCashier: React.FC = () => {
 	const history = useHistory()
@@ -20,16 +22,18 @@ const OpenCashier: React.FC = () => {
 	const formRef = useRef<FormHandles>(null)
 
 	const handleSubmit = useCallback(
-		async (data: DataOpenCashier) => {
+		async (formData: DataOpenCashier) => {
 			formRef.current?.setErrors({})
-			const formattedNumber = Number(data.value.replace(',', '.'))
+			const formattedNumber = Number(formData.value.replace(',', '.'))
+			// eslint-disable-next-line no-restricted-globals
 			if (isNaN(formattedNumber)) {
 				formRef.current?.setErrors({ value: 'Coloque um valor válido.' })
 			}
 
 			try {
-				await api.post('/cashier-moviments/open', {
+				const { data } = await api.post('/cashier-moviments/open', {
 					value: formattedNumber,
+					password: formData.password,
 				})
 
 				addSnack({
@@ -41,6 +45,11 @@ const OpenCashier: React.FC = () => {
 				history.push('/')
 			} catch (err) {
 				console.log(err)
+				addSnack({
+					type: 'danger',
+					title: 'Oops!',
+					description: 'A senha informada está incorreta.',
+				})
 			}
 		},
 		[addSnack, history],
@@ -63,6 +72,7 @@ const OpenCashier: React.FC = () => {
 
 			<Form onSubmit={handleSubmit} ref={formRef}>
 				<InputMoney label="Valor inicial" name="value" />
+				<Input label="Sua senha" name="password" type="password" />
 				<div className="button-group">
 					<Button
 						label="Cancelar"

@@ -95,4 +95,9 @@ export const DashEmpty = styled.div`
 	width: 100%;
 	align-items: center;
 	justify-content: center;
+	flex-direction: column;
+
+	h2:last-child {
+		margin-top: 48px;
+	}
 `

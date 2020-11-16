@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { FiDollarSign, FiList, FiPlus, FiShoppingCart } from 'react-icons/fi'
 import { useHistory } from 'react-router-dom'
@@ -6,6 +6,7 @@ import { Container, FAB, TableRequest, ButtonGroup, DashEmpty } from './styles'
 
 import api from '../../services/api'
 import { useModule } from '../../hooks/module'
+import { useSnack } from '../../hooks/snack'
 
 interface TableRequest {
 	id: string
@@ -21,7 +22,10 @@ interface Products {
 const Dashboard: React.FC = () => {
 	const [tableRequests, setTableRequests] = useState<TableRequest[]>()
 	const history = useHistory()
+	const [isCashierOpen, setIsCashierOpen] = useState(false)
 	const { changeModule } = useModule()
+	const { addSnack } = useSnack()
+
 	useEffect(() => {
 		;(async () => {
 			const { data } = await api.get('/table-request/')
@@ -29,6 +33,31 @@ const Dashboard: React.FC = () => {
 		})()
 		changeModule('requests')
 	}, [changeModule])
+
+	useEffect(() => {
+		;(async () => {
+			try {
+				const { data } = await api.get('/cashier-moviments/situation')
+				setIsCashierOpen(data.isOpen)
+			} catch (err) {
+				console.log(err)
+			}
+		})()
+	}, [history])
+
+	const handleFABClick = useCallback(() => {
+		if (isCashierOpen) {
+			history.push('/novo-pedido')
+		} else {
+			addSnack({
+				title: 'Atenção',
+				description:
+					'Você ainda não pode anotar pedidos, pois não há nenhum caixa aberto no momento.',
+				type: 'warning',
+			})
+			history.push('/caixa')
+		}
+	}, [addSnack, history, isCashierOpen])
 
 	return (
 		<Container>
@@ -38,8 +67,12 @@ const Dashboard: React.FC = () => {
 				{tableRequests?.length === 0 && (
 					<DashEmpty>
 						<h2>Parece que não há nenhuma mesa ocupada no momento...</h2>
+						{!isCashierOpen && (
+							<h2>O caixa ainda está fechado. Abra-o para anotar pedidos.</h2>
+						)}
 					</DashEmpty>
 				)}
+
 				{tableRequests?.map((tableRequest, i) => (
 					<TableRequest key={i}>
 						<h2>Mesa {tableRequest.number}</h2>
@@ -85,7 +118,7 @@ const Dashboard: React.FC = () => {
 					</TableRequest>
 				))}
 			</div>
-			<FAB onClick={() => history.push('/novo-pedido')}>
+			<FAB onClick={handleFABClick}>
 				<FiPlus size={24} />
 			</FAB>
 		</Container>
