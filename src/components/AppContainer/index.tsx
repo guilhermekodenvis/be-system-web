@@ -7,6 +7,7 @@ import { Container, TopBar, Main } from './styles'
 import SideMenu from '../SideMenu'
 import { useAuth } from '../../hooks/auth'
 import { useSnack } from '../../hooks/snack'
+import Toast from '../Toast'
 
 const AppContainer: React.FC = ({ children }) => {
 	const history = useHistory()
@@ -37,9 +38,9 @@ const AppContainer: React.FC = ({ children }) => {
 					)}
 				</div>
 				<title onClick={handleClickTitle}> beSystem </title>
-				<div className="logout">
+				<Toast className="logout" label="Logout">
 					<FiLogOut size={24} onClick={handleLogout} />
-				</div>
+				</Toast>
 			</TopBar>
 			<SideMenu open={menuOpen} />
 			<Main>{children}</Main>

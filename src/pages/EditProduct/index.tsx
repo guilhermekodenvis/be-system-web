@@ -1,37 +1,47 @@
 import { FormHandles } from '@unform/core'
-import { Form } from '@unform/web'
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 import * as Yup from 'yup'
-import { useHistory } from 'react-router-dom'
-import Button from '../../components/Button'
-import Input from '../../components/Input'
+import { Form } from '@unform/web'
+import { useModule } from '../../hooks/module'
 import { useSnack } from '../../hooks/snack'
-import api from '../../services/api'
-import getValidationErrors from '../../utils/getValidationErrors'
 
 import { Container } from './styles'
-import { useModule } from '../../hooks/module'
+import api from '../../services/api'
+import getValidationErrors from '../../utils/getValidationErrors'
 import PageHeader from '../../components/PageHeader'
+import Input from '../../components/Input'
 import InputMoney from '../../components/InputMoney'
+import Button from '../../components/Button'
 
-interface FormNewProductData {
+interface FormEditProductData {
 	name: string
 	category: string
 	price: number
 }
 
-const NewProduct: React.FC = () => {
+const EditProduct: React.FC = () => {
 	const history = useHistory()
 	const formRef = useRef<FormHandles>(null)
 	const { addSnack } = useSnack()
 	const { changeModule } = useModule()
+	const { product_id } = useParams<{ product_id: string }>()
+	const [product, setProduct] = useState<FormEditProductData>()
 
 	useEffect(() => {
 		changeModule('products')
 	}, [changeModule])
 
+	useEffect(() => {
+		;(async () => {
+			const response = await api.get(`/products/${product_id}`)
+
+			setProduct(response.data)
+		})()
+	}, [product_id])
+
 	const handleSubmit = useCallback(
-		async (data: FormNewProductData) => {
+		async (data: FormEditProductData) => {
 			try {
 				formRef.current?.setErrors({})
 				const schema = Yup.object().shape({
@@ -87,7 +97,7 @@ const NewProduct: React.FC = () => {
 				description="Adicione um novo produto à sua lista"
 			/>
 			<Container>
-				<Form onSubmit={handleSubmit} ref={formRef}>
+				<Form onSubmit={handleSubmit} ref={formRef} initialData={product}>
 					<Input label="Nome" name="name" />
 					<Input label="Categoria" name="category" />
 					<InputMoney label="Preço" name="price" />
@@ -113,4 +123,4 @@ const NewProduct: React.FC = () => {
 	)
 }
 
-export default NewProduct
+export default EditProduct
