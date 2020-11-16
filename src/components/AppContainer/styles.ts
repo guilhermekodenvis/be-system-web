@@ -36,8 +36,8 @@ export const TopBar = styled.header`
 	display: grid;
 	box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.25);
 
-	grid-template-columns: 72px auto;
-	grid-template-areas: 'open title';
+	grid-template-columns: 72px auto 72px;
+	grid-template-areas: 'open title logout';
 
 	.open-close {
 		grid-area: open;
@@ -53,6 +53,14 @@ export const TopBar = styled.header`
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		cursor: pointer;
+	}
+
+	.logout {
+		grid-area: logout;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		cursor: pointer;
 	}
 `
