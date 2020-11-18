@@ -54,8 +54,8 @@ export const ButtonGroup = styled.div`
 	justify-content: space-around;
 
 	button {
-		width: 48px;
-		height: 36px;
+		width: 60px;
+		height: 60px;
 		background: #4c60e6;
 		border-radius: 6px;
 		border: none;

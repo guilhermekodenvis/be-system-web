@@ -1,5 +1,11 @@
 import { Form } from '@unform/web'
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, {
+	SyntheticEvent,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from 'react'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { useHistory } from 'react-router-dom'
@@ -11,6 +17,7 @@ import { Container } from './styles'
 import api from '../../services/api'
 import { useModule } from '../../hooks/module'
 import PageHeader from '../../components/PageHeader'
+import Modal from '../../components/Modal'
 
 interface ContinueToRequestFormData {
 	table_number: string
@@ -18,6 +25,16 @@ interface ContinueToRequestFormData {
 
 const SelectTable: React.FC = () => {
 	const { changeModule } = useModule()
+
+	const [showModal, setShowModal] = useState(false)
+	const [tableNumber, setTableNumber] = useState('')
+	const handleCloseModal = useCallback(() => {
+		setShowModal(false)
+	}, [])
+
+	const handleOpenModal = useCallback(() => {
+		setShowModal(true)
+	}, [])
 
 	useEffect(() => {
 		changeModule('requests')
@@ -64,6 +81,26 @@ const SelectTable: React.FC = () => {
 		},
 		[history],
 	)
+
+	const handleClickSubmit = useCallback(
+		async (e: SyntheticEvent) => {
+			e.preventDefault()
+			try {
+				const response = await api.get(
+					`table-request/verify-table/${tableNumber}`,
+				)
+				console.log(response.data)
+				if (response.data.is_available) {
+					formRef.current?.submitForm()
+				} else {
+					handleOpenModal()
+				}
+			} catch (err) {
+				console.log(err)
+			}
+		},
+		[handleOpenModal, tableNumber],
+	)
 	return (
 		<>
 			<PageHeader
@@ -72,17 +109,56 @@ const SelectTable: React.FC = () => {
 			/>
 			<Container>
 				<Form onSubmit={handleSubmit} ref={formRef}>
-					<Input label="Número da mesa" name="table_number" />
+					<Input
+						label="Número da mesa"
+						name="table_number"
+						onChange={e => setTableNumber(e.target.value)}
+					/>
 					<div className="bt-group">
 						<Button
 							label="Cancelar"
 							variant="cancel"
 							onClick={e => history.push('')}
 						/>
-						<Button label="continuar" size="big" type="submit" />
+						<Button
+							label="continuar"
+							size="big"
+							type="submit"
+							onClick={handleClickSubmit}
+						/>
 					</div>
 				</Form>
 			</Container>
+			<Modal
+				closeModal={handleCloseModal}
+				openModal={handleOpenModal}
+				open={showModal}
+				title="Atenção"
+			>
+				<p>
+					A mesa selecionada já possui pedidos em aberto. A mesa informada é a
+					correta?
+				</p>
+				<div
+					style={{
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'space-around',
+						paddingTop: '24px',
+					}}
+				>
+					<Button
+						variant="cancel"
+						label="Não, cancelar"
+						onClick={handleCloseModal}
+					/>
+					<Button
+						variant="primary"
+						label="Sim, continuar"
+						onClick={formRef?.current?.submitForm}
+					/>
+				</div>
+			</Modal>
 		</>
 	)
 }
