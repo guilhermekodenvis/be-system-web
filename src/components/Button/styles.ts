@@ -18,6 +18,17 @@ export const Container = styled.button<Omit<ButtonProps, 'label'>>`
 	}
 
 	${props =>
+		props.disabled &&
+		css`
+			background: #958a8a;
+			opacity: 0.8;
+			cursor: not-allowed;
+			&:hover {
+				background: ${shade(0.2, '#958a8a')};
+			}
+		`}
+
+	${props =>
 		props.variant === 'cancel' &&
 		css`
 			background: transparent;

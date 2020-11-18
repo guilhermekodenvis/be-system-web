@@ -4,7 +4,9 @@ import { FiPlusCircle, FiTrash2 } from 'react-icons/fi'
 import { useHistory, useParams } from 'react-router-dom'
 import Button from '../../components/Button'
 import InputMoney from '../../components/InputMoney'
+import PageHeader from '../../components/PageHeader'
 import SelectInput from '../../components/SelectInput'
+import Toast from '../../components/Toast'
 import { useModule } from '../../hooks/module'
 import { useSnack } from '../../hooks/snack'
 import api from '../../services/api'
@@ -175,10 +177,11 @@ const PayTableRequest: React.FC = () => {
 
 	return (
 		<Container>
-			<Header>
-				<h1>Pagar pedido</h1>
-				<p>Detalhes do pedido e pagamento</p>
-			</Header>
+			<PageHeader
+				title={`Pagar pedido da mesa ${tableRequest.number}`}
+				description="Detalhes do pedido e pagamento"
+			/>
+
 			<Body>
 				<Left>
 					<div className="payment-info">
@@ -241,9 +244,11 @@ const PayTableRequest: React.FC = () => {
 										}).format(paymentMethod.value)}
 									</p>
 									<p>{namefyPaymentMethod(paymentMethod.type)}</p>
-									<button onClick={() => handleDelete(i)}>
-										<FiTrash2 size={24} />
-									</button>
+									<Toast label="Remover">
+										<button onClick={() => handleDelete(i)}>
+											<FiTrash2 size={24} />
+										</button>
+									</Toast>
 								</li>
 							)
 						})}
