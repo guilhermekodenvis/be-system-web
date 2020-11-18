@@ -11,7 +11,7 @@ import { useModule } from '../../hooks/module'
 import { useSnack } from '../../hooks/snack'
 import api from '../../services/api'
 
-import { Container, Header, Body, Left, Right, PaymentList } from './styles'
+import { Container, Body, Left, Right, PaymentList } from './styles'
 
 interface DataForm {
 	value: string

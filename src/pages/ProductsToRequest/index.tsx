@@ -211,12 +211,6 @@ const ProductsToRequest: React.FC = () => {
 					<strong>
 						Total: <span>{finalPrice}</span>
 					</strong>
-					<Button
-						disabled
-						label="Detalhes"
-						variant="secundary-outline"
-						onClick={() => history.push('/detalhes-do-pedido')}
-					/>
 				</div>
 				<div className="products-list">{productList}</div>
 

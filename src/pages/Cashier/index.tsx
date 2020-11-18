@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { FiDollarSign, FiList } from 'react-icons/fi'
 import { useHistory } from 'react-router-dom'
 import Button from '../../components/Button'
@@ -163,7 +163,7 @@ const Cashier: React.FC = () => {
 				</Table>
 			</>
 		)
-	}, [details])
+	}, [details, history])
 
 	return (
 		<Container>
