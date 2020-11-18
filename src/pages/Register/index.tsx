@@ -48,8 +48,6 @@ const Register: React.FC = () => {
 					abortEarly: false,
 				})
 
-				console.log('data', data)
-
 				const dataToSend = {
 					user_name: data.user_name,
 					restaurant_name: data.restaurant_name,

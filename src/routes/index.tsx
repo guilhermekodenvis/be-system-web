@@ -20,6 +20,7 @@ import SelectTable from '../pages/SelectTable'
 import PayTableRequest from '../pages/PayTableRequest'
 import CloseCashier from '../pages/CloseCashier'
 import Cashier from '../pages/Cashier'
+import EditProfile from '../pages/EditProfile'
 
 const Routes: React.FC = () => (
 	<Switch>
@@ -29,6 +30,7 @@ const Routes: React.FC = () => (
 		<Route path="/esqueci-a-senha/:token" component={NewPassword} />
 		<AppContainer>
 			<Route exact path="/" component={Dashboard} isPrivate />
+			<Route exact path="/editar-perfil" component={EditProfile} isPrivate />
 
 			<Route exact path="/novo-produto" component={NewProduct} isPrivate />
 			<Route exact path="/produtos" component={Products} isPrivate />

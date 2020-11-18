@@ -84,7 +84,7 @@ const EditProduct: React.FC = () => {
 				// })
 			}
 		},
-		[addSnack, history],
+		[addSnack, history, product_id],
 	)
 
 	const handleClickCancel = useCallback(() => {

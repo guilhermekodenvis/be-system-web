@@ -18,6 +18,19 @@ export const Container = styled.button<Omit<ButtonProps, 'label'>>`
 	}
 
 	${props =>
+		props.variant === 'cancel' &&
+		css`
+			background: transparent;
+			border: 1px solid #d95267;
+			color: #d95267;
+			font-weight: bold;
+
+			&:hover {
+				background: ${transparentize(0.8, '#d95267')};
+			}
+		`}
+
+	${props =>
 		props.variant === 'secundary' &&
 		css`
 			background: #4c60e6;

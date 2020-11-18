@@ -39,9 +39,10 @@ export const Profile = styled.div`
 			justify-content: space-between;
 			align-items: flex-start;
 			img {
-				width: 84px;
-				height: 84px;
-				border-radius: 12px;
+				width: 120px;
+				height: 120px;
+				border-radius: 50%;
+				border: 2px solid #e36414;
 			}
 
 			svg {

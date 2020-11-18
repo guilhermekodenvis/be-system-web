@@ -6,12 +6,14 @@ import { Container, Profile, MenuList, MenuItem } from './styles'
 
 import { useModule } from '../../hooks/module'
 import Toast from '../Toast'
+import { useAuth } from '../../hooks/auth'
 
 interface SideMenuProps {
 	open: boolean
 }
 
 const SideMenu: React.FC<SideMenuProps> = ({ open }) => {
+	const { user } = useAuth()
 	const { moduleName } = useModule()
 	const history = useHistory()
 	const handleOpenRequests = useCallback(() => {
@@ -24,21 +26,22 @@ const SideMenu: React.FC<SideMenuProps> = ({ open }) => {
 		history.push('/produtos')
 	}, [history])
 
+	const handleClickEditProfile = useCallback(() => {
+		history.push('/editar-perfil')
+	}, [history])
+
 	return (
 		<Container open={open}>
 			<Profile>
 				<div>
 					<div className="top">
-						<img
-							src="https://static-images.ifood.com.br/image/upload//capa/04c26c34-33c3-4e34-a861-0bc11c3eacf8/202005040942_uHie_@2x.jpeg"
-							alt="comidinhas vinhola"
-						/>
+						<img src={user.avatar_url} alt={user.restaurant_name} />
 						<Toast label="Editar perfil">
-							<FiEdit size={24} />
+							<FiEdit size={24} onClick={handleClickEditProfile} />
 						</Toast>
 					</div>
-					<strong>Comidinhas</strong>
-					<p>comidinhas@gmail.com</p>
+					<strong>{user.restaurant_name}</strong>
+					<p>{user.email}</p>
 				</div>
 			</Profile>
 			<MenuList>

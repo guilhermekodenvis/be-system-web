@@ -6,8 +6,8 @@ export const Container = styled.div`
 	padding: 12px;
 	flex: 1;
 	border-radius: 12px;
-	width: calc(100% -12px);
-	margin: 12px;
+	width: 960px;
+	margin: 0 auto;
 	h1 {
 		font-size: 32px;
 		margin-top: 12px;
@@ -38,6 +38,16 @@ export const Container = styled.div`
 				display: block;
 				margin-left: auto;
 			}
+		}
+	}
+
+	.bt-group {
+		display: flex;
+		width: 100%;
+		justify-content: flex-end;
+
+		button {
+			margin-left: 12px;
 		}
 	}
 `

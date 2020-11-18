@@ -7,6 +7,7 @@ interface User {
 	restaurant_name: string
 	email: string
 	cnpj: string
+	avatar_url: string
 }
 
 interface AuthState {
@@ -23,7 +24,7 @@ interface AuthContextData {
 	user: User
 	signIn(credentials: SignInCredentials): Promise<void>
 	signOut(): void
-	// updateUser(user: User): void
+	updateUser(user: User): void
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData)
@@ -65,22 +66,21 @@ const AuthProvider: React.FC = ({ children }) => {
 		setData({ token, user })
 	}, [])
 
-	// const updateUser = useCallback(
-	// 	(user: User) => {
-	// 		localStorage.setItem('@beSystem:user', JSON.stringify(user))
+	const updateUser = useCallback(
+		(user: User) => {
+			localStorage.setItem('@beSystem:user', JSON.stringify(user))
 
-	// 		setData({
-	// 			token: data.token,
-	// 			user,
-	// 		})
-	// 	},
-	// 	[setData, data.token],
-	// )
+			setData({
+				token: data.token,
+				user,
+			})
+		},
+		[setData, data.token],
+	)
 
 	return (
 		<AuthContext.Provider
-			value={{ user: data.user, signIn, signOut }}
-			// value={{ user: data.user, signIn, signOut, updateUser }}
+			value={{ user: data.user, signIn, signOut, updateUser }}
 		>
 			{children}
 		</AuthContext.Provider>

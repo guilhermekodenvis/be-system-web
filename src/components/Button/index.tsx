@@ -4,7 +4,7 @@ import { Container } from './styles'
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	label: string
-	variant?: 'primary' | 'secundary' | 'secundary-outline'
+	variant?: 'primary' | 'secundary' | 'secundary-outline' | 'cancel'
 	size?: 'normal' | 'big'
 }
 

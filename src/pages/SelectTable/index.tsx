@@ -73,7 +73,14 @@ const SelectTable: React.FC = () => {
 			<Container>
 				<Form onSubmit={handleSubmit} ref={formRef}>
 					<Input label="Número da mesa" name="table_number" />
-					<Button label="continuar" size="big" type="submit" />
+					<div className="bt-group">
+						<Button
+							label="Cancelar"
+							variant="cancel"
+							onClick={e => history.push('')}
+						/>
+						<Button label="continuar" size="big" type="submit" />
+					</div>
 				</Form>
 			</Container>
 		</>
