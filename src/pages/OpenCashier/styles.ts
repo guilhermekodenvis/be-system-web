@@ -11,9 +11,9 @@ export const Container = styled.div`
 		max-width: 960px;
 		margin: 0 auto;
 		padding: 48px;
-		> div:first-child {
+		/* > div:first-child {
 			width: 180px;
-		}
+		} */
 
 		.button-group {
 			display: flex;
@@ -22,10 +22,6 @@ export const Container = styled.div`
 			& > button:first-child {
 				margin-right: 24px;
 			}
-		}
-
-		input:last-child {
-			width: 360px;
 		}
 	}
 `

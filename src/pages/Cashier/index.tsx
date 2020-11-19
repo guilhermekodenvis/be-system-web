@@ -165,6 +165,25 @@ const Cashier: React.FC = () => {
 		)
 	}, [details, history])
 
+	const buttonCloseCashier = useMemo(() => {
+		return allTableRequestsElement.length === 0 ? (
+			<Button
+				label="Fechar caixa"
+				variant="primary"
+				onClick={e => history.push('fechar-caixa')}
+			/>
+		) : (
+			<Toast label="Só é possível fechar o caixa sem pedidos em aberto.">
+				<Button
+					label="Fechar caixa"
+					variant="primary"
+					disabled
+					onClick={e => console.log('eae')}
+				/>
+			</Toast>
+		)
+	}, [allTableRequestsElement.length, history])
+
 	return (
 		<Container>
 			<PageHeader
@@ -174,14 +193,7 @@ const Cashier: React.FC = () => {
 			<Main>
 				<Left>
 					<Button label="realizar sangria" variant="secundary" />
-					<Toast label="Só é possível fechar o caixa sem pedidos em aberto.">
-						<Button
-							label="Fechar caixa"
-							variant="primary"
-							disabled
-							onClick={e => console.log('eae')}
-						/>
-					</Toast>
+					{buttonCloseCashier}
 					<h2>Pedidos em andamento</h2>
 					<ul>{allTableRequestsElement}</ul>
 				</Left>

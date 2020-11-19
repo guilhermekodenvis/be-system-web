@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import Button from '../../components/Button'
+import PageHeader from '../../components/PageHeader'
 import { useModule } from '../../hooks/module'
 import api from '../../services/api'
 
@@ -36,8 +37,10 @@ const TableRequestDetails: React.FC = () => {
 
 	return (
 		<Container>
-			<h1>Mesa {tableRequest?.number}</h1>
-			<p>Veja os pedidos da mesa {tableRequest?.number}.</p>
+			<PageHeader
+				title={`Mesa ${tableRequest?.number}`}
+				description={`Veja os pedidos da mesa ${tableRequest?.number}.`}
+			/>
 			<div className="top">
 				<strong>
 					Total:{' '}

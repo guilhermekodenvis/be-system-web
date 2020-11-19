@@ -61,8 +61,8 @@ const OpenCashier: React.FC = () => {
 	}, [changeModule])
 
 	const handleClickCancel = useCallback(() => {
-		console.log('cancelou')
-	}, [])
+		history.push('/')
+	}, [history])
 	return (
 		<Container>
 			<PageHeader
@@ -72,11 +72,16 @@ const OpenCashier: React.FC = () => {
 
 			<Form onSubmit={handleSubmit} ref={formRef}>
 				<InputMoney label="Valor inicial" name="value" />
-				<Input label="Sua senha" name="password" type="password" />
+				<Input
+					label="Sua senha"
+					name="password"
+					type="password"
+					style={{ width: 360 }}
+				/>
 				<div className="button-group">
 					<Button
 						label="Cancelar"
-						variant="secundary"
+						variant="cancel"
 						size="normal"
 						type="button"
 						onClick={handleClickCancel}

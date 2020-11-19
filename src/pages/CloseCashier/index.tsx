@@ -1,17 +1,17 @@
+/* eslint-disable indent */
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import * as Yup from 'yup'
 import Button from '../../components/Button'
 import Input from '../../components/Input'
 import PageHeader from '../../components/PageHeader'
 import { useModule } from '../../hooks/module'
 import { useSnack } from '../../hooks/snack'
 import api from '../../services/api'
-import getValidationErrors from '../../utils/getValidationErrors'
+import convertNumberToBRLCurrency from '../../utils/convertNumberToBRLCurrency'
 
-import { Container, Details, Relatory } from './styles'
+import { Container, Details, Relatory, Right } from './styles'
 
 interface FormData {
 	observation: string
@@ -22,10 +22,16 @@ interface CashierMoviment {
 	value: number
 }
 
+interface CloseCashier {
+	cashier_moviments: CashierMoviment[]
+	money_in_cashier: number
+	brute_total_money: number
+}
+
 const CloseCashier: React.FC = () => {
 	const { changeModule } = useModule()
-	const [cashierMoviments, setCashierMoviments] = useState<CashierMoviment[]>(
-		[],
+	const [cashierMoviments, setCashierMoviments] = useState<CloseCashier>(
+		{} as CloseCashier,
 	)
 	const formRef = useRef<FormHandles>(null)
 	const { addSnack } = useSnack()
@@ -35,6 +41,7 @@ const CloseCashier: React.FC = () => {
 		;(async () => {
 			try {
 				const { data } = await api.get('/cashier-moviments')
+				console.log(data)
 				setCashierMoviments(data)
 			} catch (err) {
 				console.log(err)
@@ -44,30 +51,47 @@ const CloseCashier: React.FC = () => {
 		changeModule('cashier')
 	}, [changeModule])
 
+	const convertType = useCallback((type: number) => {
+		if (type === 0) {
+			return 'Abertura'
+		}
+		if (type === 1) {
+			return 'Débito'
+		}
+		if (type === 2) {
+			return 'Crédito'
+		}
+		if (type === 3) {
+			return 'Dinheiro'
+		}
+		if (type === 4) {
+			return 'Sangria'
+		}
+		if (type === 5) {
+			return 'Troco'
+		}
+		if (type === 6) {
+			return 'Fechamento'
+		}
+		return ''
+	}, [])
+
 	const cashierMovimentsElement = useMemo(() => {
-		return cashierMoviments.map((cashierMoviment, i) => {
+		return cashierMoviments?.cashier_moviments?.map((cashierMoviment, i) => {
 			return (
 				<tr key={i}>
-					<td>{cashierMoviment.action}</td>
-					<td>{cashierMoviment.value}</td>
+					<td>{convertType(cashierMoviment.action)}</td>
+					<td>{convertNumberToBRLCurrency(cashierMoviment.value)}</td>
 				</tr>
 			)
 		})
-	}, [cashierMoviments])
+	}, [cashierMoviments, convertType])
 
 	const handleSubmit = useCallback(
 		async (data: FormData) => {
 			try {
-				formRef.current?.setErrors({})
-				const schema = Yup.object().shape({
-					observation: Yup.string().required(),
-				})
-
-				await schema.validate(data, {
-					abortEarly: false,
-				})
-
 				await api.post('/cashier-moviments/close', data)
+
 				addSnack({
 					type: 'success',
 					title: 'Sucesso!',
@@ -76,26 +100,12 @@ const CloseCashier: React.FC = () => {
 
 				history.push('/')
 			} catch (err) {
-				if (err instanceof Yup.ValidationError) {
-					addSnack({
-						type: 'danger',
-						title: 'Oops!',
-						description: 'Corrija os campos para cadastrar o produto.',
-					})
-					const errors = getValidationErrors(err)
-
-					formRef.current?.setErrors(errors)
-
-					return
-				}
-
 				console.log(err)
-
-				// addToast({
-				// 	type: 'error',
-				// 	title: 'Erro na autenticação',
-				// 	description: 'Ocorreu um erro ao fazer login, cheque as credenciais.',
-				// })
+				addSnack({
+					type: 'danger',
+					title: 'Oops!',
+					description: 'A senha informada está incorreta.',
+				})
 			}
 		},
 		[addSnack, history],
@@ -112,11 +122,17 @@ const CloseCashier: React.FC = () => {
 					<Details>
 						<div>
 							<strong>Dinheiro em caixa</strong>
-							<p>R$ 2000,00</p>
+							<p>
+								{convertNumberToBRLCurrency(cashierMoviments?.money_in_cashier)}
+							</p>
 						</div>
 						<div>
-							<strong>Faturamento toal</strong>
-							<p>R$ 6000,00</p>
+							<strong>Valor bruto total</strong>
+							<p>
+								{convertNumberToBRLCurrency(
+									cashierMoviments?.brute_total_money,
+								)}
+							</p>
 						</div>
 					</Details>
 					<Relatory>
@@ -132,11 +148,20 @@ const CloseCashier: React.FC = () => {
 						</table>
 					</Relatory>
 				</div>
-				<div>
-					<Form onSubmit={handleSubmit} ref={formRef}>
-						<Input label="Obervação" name="observation" />
-						<Button label="Confirmar e fechar caixa" type="submit" />
-					</Form>
+				<div style={{ marginTop: 0 }}>
+					<Right>
+						<h2>Continue para fechar</h2>
+						<Form onSubmit={handleSubmit} ref={formRef}>
+							<Input label="Obervação" name="observation" />
+							<Input
+								label="Sua senha"
+								name="password"
+								type="password"
+								style={{ width: 360 }}
+							/>
+							<Button label="Confirmar e fechar caixa" type="submit" />
+						</Form>
+					</Right>
 				</div>
 			</Container>
 		</>

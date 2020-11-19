@@ -70,3 +70,14 @@ export const Relatory = styled.div`
 		}
 	}
 `
+
+export const Right = styled.div`
+	border-radius: 12px;
+	padding: 24px 36px;
+	max-width: 100%;
+	height: auto;
+	background: #382e63;
+	h2 {
+		transform: translateY(-12px) translateX(-12px);
+	}
+`
