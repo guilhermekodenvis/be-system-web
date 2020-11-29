@@ -14,7 +14,7 @@ import EditProduct from '../pages/EditProduct'
 import OpenCashier from '../pages/OpenCashier'
 import AppContainer from '../components/AppContainer'
 // import Error404 from '../pages/Error404'
-import ProductsToRequest from '../pages/ProductsToRequest'
+import AddProductsToTableRequest from '../pages/AddProductsToTableRequest'
 import TableRequestDetails from '../pages/TableRequestDetails'
 import SelectTable from '../pages/SelectTable'
 import PayTableRequest from '../pages/PayTableRequest'
@@ -42,7 +42,7 @@ const Routes: React.FC = () => (
 
 			<Route
 				path="/adicionar-produto/:table_id"
-				component={ProductsToRequest}
+				component={AddProductsToTableRequest}
 				isPrivate
 			/>
 			<Route

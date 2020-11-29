@@ -7,7 +7,7 @@ interface ModalProps {
 	closeModal(): void
 	openModal(): void
 	open: boolean
-	title: string
+	title?: string
 }
 
 const Modal: React.FC<ModalProps> = ({ closeModal, open, title, children }) => {
@@ -22,19 +22,19 @@ const Modal: React.FC<ModalProps> = ({ closeModal, open, title, children }) => {
 				},
 				content: {
 					width: '480px',
-					height: '200px',
+					height: '240px',
 					position: 'fixed',
 					top: 'calc(50vh - 100px)',
 					left: 'calc(50vw - 240px)',
 					borderRadius: '12px',
-					background: '#1F1449',
+					background: '#382E63',
 					boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.25)',
 					border: 'none',
 				},
 			}}
 		>
 			<Container>
-				<h2>{title}</h2>
+				{title && <h2>{title}</h2>}
 				{children}
 			</Container>
 		</ReactModal>

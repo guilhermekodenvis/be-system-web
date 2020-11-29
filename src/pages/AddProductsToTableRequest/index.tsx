@@ -2,13 +2,17 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FiMinus, FiPlus } from 'react-icons/fi'
 import { useHistory, useParams } from 'react-router-dom'
 import printJS from 'print-js'
+import { Form } from '@unform/web'
 import Button from '../../components/Button'
 import PageHeader from '../../components/PageHeader'
 import { useModule } from '../../hooks/module'
 import { useSnack } from '../../hooks/snack'
 import api from '../../services/api'
 
-import { Container, Product, BottomNavigation } from './styles'
+import { Container, Product, BottomNavigation, Quantity } from './styles'
+import convertNumberToBRLCurrency from '../../utils/convertNumberToBRLCurrency'
+import Modal from '../../components/Modal'
+import Input from '../../components/Input'
 
 interface Product {
 	id: string
@@ -27,7 +31,7 @@ interface CartProduct {
 	observation: string
 }
 
-const ProductsToRequest: React.FC = () => {
+const AddProductsToTableRequest: React.FC = () => {
 	const history = useHistory()
 	const [products, setProducts] = useState<Product[]>([])
 	const [activedCategory, setActivedCategory] = useState<number>(0)
@@ -35,6 +39,11 @@ const ProductsToRequest: React.FC = () => {
 	const { table_id } = useParams<{ table_id: string }>()
 	const { addSnack } = useSnack()
 	const { changeModule } = useModule()
+	const [showModal, setShowModal] = useState(false)
+	const [
+		currentProductToSetObservation,
+		setCurrentProductToSetObservation,
+	] = useState<Product>({} as Product)
 
 	useEffect(() => {
 		changeModule('requests')
@@ -63,9 +72,9 @@ const ProductsToRequest: React.FC = () => {
 					quantity: newQtt,
 					product_price: product.price,
 					product_name: product.name,
-					observation: 'obs',
+					// observation: '',
 				}
-				newList.push(newProductToCart)
+				newList.push(newProductToCart as CartProduct)
 			}
 			return [...newList]
 		})
@@ -118,6 +127,39 @@ const ProductsToRequest: React.FC = () => {
 		})()
 	}, [])
 
+	const handleCloseModal = useCallback(() => {
+		setShowModal(false)
+	}, [])
+	const handleOpenModal = useCallback(() => {
+		setShowModal(true)
+	}, [])
+
+	const handleClickAddObservation = useCallback(
+		(product: Product) => {
+			handleOpenModal()
+			setCurrentProductToSetObservation(product)
+		},
+		[handleOpenModal],
+	)
+
+	const handleObservationSubmit = useCallback(
+		({ observation }: { observation: string }) => {
+			setProductsInCart(prev => {
+				const newList = [...prev]
+				const unchengedProductIndex = newList.findIndex(
+					prod => prod.product_id === currentProductToSetObservation.id,
+				)
+
+				if (unchengedProductIndex >= 0) {
+					newList[unchengedProductIndex].observation = observation
+				}
+				return [...newList]
+			})
+			handleCloseModal()
+		},
+		[currentProductToSetObservation.id, handleCloseModal],
+	)
+
 	const unduplicadCategories = useMemo(() => {
 		const categories = products?.map(product => product.category.trim())
 		return Array.from(new Set(categories))
@@ -153,17 +195,33 @@ const ProductsToRequest: React.FC = () => {
 					<strong>{product.name}</strong>
 					<p>
 						<span>Preço </span>
-						{new Intl.NumberFormat('pt-BR', {
-							style: 'currency',
-							currency: 'BRL',
-						}).format(product.price)}
+						{convertNumberToBRLCurrency(product.price)}
 					</p>
-					<div className="quantity">
-						<span>Qtd.</span>
-						<div>
-							{product.quantity > 0 && product.quantity && (
+
+					<div>
+						{product.quantity > 0 && (
+							<Button
+								style={{ maxWidth: '100% !important' }}
+								label="Adicionar observação"
+								variant="secundary-outline"
+								onClick={e => handleClickAddObservation(product)}
+							/>
+						)}
+
+						<Quantity>
+							{product.quantity > 0 && product.quantity ? (
 								<button
 									className="less"
+									onClick={() => {
+										handleDecrementCart(product)
+									}}
+								>
+									<FiMinus size={24} />
+								</button>
+							) : (
+								<button
+									className="less"
+									disabled
 									onClick={() => {
 										handleDecrementCart(product)
 									}}
@@ -178,14 +236,19 @@ const ProductsToRequest: React.FC = () => {
 									handleIncrementCart(product)
 								}}
 							>
-								<FiPlus size={18} />
+								<FiPlus size={24} />
 							</button>
-						</div>
+						</Quantity>
 					</div>
 				</Product>
 			)
 		})
-	}, [filteredProducts, handleDecrementCart, handleIncrementCart])
+	}, [
+		filteredProducts,
+		handleClickAddObservation,
+		handleDecrementCart,
+		handleIncrementCart,
+	])
 
 	const finalPrice = useMemo(() => {
 		return new Intl.NumberFormat('pt-BR', {
@@ -226,8 +289,32 @@ const ProductsToRequest: React.FC = () => {
 					/>
 				</div>
 			</Container>
+			<Modal
+				closeModal={handleCloseModal}
+				openModal={handleOpenModal}
+				open={showModal}
+			>
+				<Form onSubmit={handleObservationSubmit}>
+					<Input label="Observação" name="observation" />
+					<div
+						style={{
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'space-around',
+							paddingTop: '24px',
+						}}
+					>
+						<Button
+							variant="cancel"
+							label="Não, cancelar"
+							onClick={handleCloseModal}
+						/>
+						<Button variant="primary" label="Sim, continuar" type="submit" />
+					</div>
+				</Form>
+			</Modal>
 		</>
 	)
 }
 
-export default ProductsToRequest
+export default AddProductsToTableRequest

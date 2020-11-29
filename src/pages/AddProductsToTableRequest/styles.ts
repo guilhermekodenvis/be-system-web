@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import { shade } from 'polished'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 export const Container = styled.div`
 	padding: 12px;
@@ -68,60 +68,44 @@ export const Container = styled.div`
 `
 
 export const Product = styled.div`
-	width: calc(50% - 12px);
+	width: calc(50% - 6px);
 	min-height: 144px;
 	background: #382e63;
 	margin-top: 24px;
 	border-radius: 12px;
-	padding-bottom: 12px;
-	padding-right: 12px;
+	padding: 12px;
 	display: flex;
 	flex-direction: column;
 
 	strong {
 		align-self: flex-start;
+		font-size: 18px;
+		margin: 6px auto 12px auto;
+		height: 24px;
 	}
 
 	p {
 		display: flex;
 		width: 100%;
-		padding-left: 12px;
 		justify-content: space-between;
 	}
 
-	.quantity {
-		flex: 1;
-		display: flex;
+	> div {
+		padding-top: 0;
+		display: grid;
+		grid-template-areas:
+			'quantity'
+			'observation';
 		width: 100%;
-		padding-left: 12px;
-		align-items: baseline;
-		justify-content: space-between;
-		span {
-			padding: 0 6px;
-		}
-		button {
-			border: none;
-			color: #e9e3ff;
-			width: 36px;
-			height: 30px;
-			border-radius: 6px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
 
-			&.less {
-				background: #d95267;
-				margin-left: auto;
-				&:hover {
-					background: ${shade(0.2, '#d95267')};
-				}
-			}
-			&.more {
-				background: #2db27b;
-				&:hover {
-					background: ${shade(0.2, '#2db27b')};
-				}
-			}
+		@media (min-width: 420px) {
+			grid-template-areas: 'observation quantity';
+			justify-content: space-between;
+		}
+
+		> button {
+			grid-area: observation;
+			margin-top: 12px;
 		}
 	}
 `
@@ -173,5 +157,50 @@ export const BottomNavigation = styled.div`
 		ul {
 			overflow-y: hidden;
 		}
+	}
+`
+
+export const Quantity = styled.div`
+	display: flex;
+	width: 100%;
+	align-items: center;
+	justify-content: space-around;
+	font-size: 24px;
+	grid-area: quantity;
+	button {
+		border: none;
+		color: #e9e3ff;
+		width: 48px;
+		height: 48px;
+		border-radius: 12px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		&:disabled {
+			background: ${shade(0.2, '#d95267')} !important;
+			cursor: not-allowed;
+		}
+
+		&.less {
+			background: #d95267;
+			&:hover {
+				background: ${shade(0.2, '#d95267')};
+			}
+		}
+		&.more {
+			background: #2db27b;
+			&:hover {
+				background: ${shade(0.2, '#2db27b')};
+			}
+		}
+	}
+
+	span {
+		align-self: center;
+	}
+
+	@media (min-width: 420px) {
+		width: 180px;
 	}
 `
