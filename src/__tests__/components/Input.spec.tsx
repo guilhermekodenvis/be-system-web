@@ -14,6 +14,8 @@ jest.mock('@unform/core', () => {
 		},
 	}
 })
+// TODO: FINALIZAR OS TESTES
+// VALIDAR A PARTE SE O ERRO FOI EXIBIDO NA TELA, ETC
 
 describe('Input component', () => {
 	it('should be able to render the input', () => {

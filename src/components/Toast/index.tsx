@@ -12,6 +12,7 @@ const Toast: React.FC<ToastProps> = ({ children, label, className }) => {
 
 	return (
 		<Container
+			data-testid="toast-component"
 			className={className}
 			onMouseOver={e => setHovered(true)}
 			onMouseOut={e => setHovered(false)}

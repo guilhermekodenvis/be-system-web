@@ -31,13 +31,17 @@ const SideMenu: React.FC<SideMenuProps> = ({ open }) => {
 	}, [history])
 
 	return (
-		<Container open={open}>
+		<Container open={open} data-testid="sidemenu-component">
 			<Profile>
 				<div>
 					<div className="top">
 						<img src={user.avatar_url} alt={user.restaurant_name} />
 						<Toast label="Editar perfil">
-							<FiEdit size={24} onClick={handleClickEditProfile} />
+							<FiEdit
+								size={24}
+								onClick={handleClickEditProfile}
+								data-testid="open-profile"
+							/>
 						</Toast>
 					</div>
 					<strong>{user.restaurant_name}</strong>
@@ -46,6 +50,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ open }) => {
 			</Profile>
 			<MenuList>
 				<MenuItem
+					data-testid="request-menu-item"
 					active={moduleName === 'requests'}
 					onClick={handleOpenRequests}
 				>
@@ -53,6 +58,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ open }) => {
 					Pedidos
 				</MenuItem>
 				<MenuItem
+					data-testid="cashier-menu-item"
 					active={moduleName === 'cashier'}
 					onClick={handleOpenCashierPage}
 				>
@@ -60,6 +66,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ open }) => {
 					Caixa
 				</MenuItem>
 				<MenuItem
+					data-testid="products-menu-item"
 					active={moduleName === 'products'}
 					onClick={handleOpenProducts}
 				>

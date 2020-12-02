@@ -37,7 +37,7 @@ const Snack: React.FC<SnackProps> = ({ message, style }) => {
 	return (
 		<Container
 			type={message.type}
-			hasDescription={Number(!!message.description)}
+			hasdescription={Number(!!message.description)}
 			style={style}
 		>
 			{icons[message.type || 'success']}
@@ -47,7 +47,11 @@ const Snack: React.FC<SnackProps> = ({ message, style }) => {
 				{message.description && <p>{message.description}</p>}
 			</div>
 
-			<button onClick={() => removeSnack(message.id)} type="button">
+			<button
+				data-testid="remove-snack-button"
+				onClick={() => removeSnack(message.id)}
+				type="button"
+			>
 				<FiXCircle size={18} />
 			</button>
 			<div className="timer"></div>

@@ -57,7 +57,7 @@ export const Container = styled.button<Omit<ButtonProps, 'label'>>`
 			width: 100%;
 		`}
 
-		${props =>
+	${props =>
 		props.variant === 'secundary-outline' &&
 		css`
 			background: transparent;

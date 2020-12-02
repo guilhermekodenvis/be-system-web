@@ -23,10 +23,6 @@ const ModuleProvider: React.FC = ({ children }) => {
 function useModule(): ModuleContextData {
 	const context = useContext(ModuleContext)
 
-	if (!context) {
-		throw new Error('useModule must be used within a ModuleContext.Provider')
-	}
-
 	return context
 }
 

@@ -82,6 +82,7 @@
     "eslint-plugin-react-hooks": "^2.5.0",
     "install": "^0.13.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
+    "jest-styled-components": "^7.0.3",
     "prettier": "^2.1.2",
     "react-test-renderer": "^17.0.1"
   }

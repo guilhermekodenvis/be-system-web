@@ -17,17 +17,11 @@ const InputMoney: React.FC<InputMoneyProps> = ({ name, label, ...rest }) => {
 			name: fieldName,
 			ref: inputRef.current,
 			path: 'value',
-			setValue(ref: any, value: string) {
-				ref.setInputValue(value)
-			},
-			clearValue(ref: any) {
-				ref.setInputValue('')
-			},
 		})
 	}, [fieldName, registerField])
 
 	return (
-		<Container>
+		<Container data-testid="input-money-component">
 			<label htmlFor={name}>{label}</label>
 			<div>
 				<p>R$</p>
@@ -39,7 +33,6 @@ const InputMoney: React.FC<InputMoneyProps> = ({ name, label, ...rest }) => {
 					defaultValue={defaultValue}
 					autoComplete="off"
 					{...rest}
-					onChange={e => e.preventDefault()}
 				/>
 			</div>
 			{error && <span className="error">{error}</span>}

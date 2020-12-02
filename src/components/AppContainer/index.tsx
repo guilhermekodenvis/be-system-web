@@ -28,18 +28,33 @@ const AppContainer: React.FC = ({ children }) => {
 	}, [addSnack, signOut])
 
 	return (
-		<Container open={menuOpen}>
+		<Container open={menuOpen} data-testid="container-appcontainer">
 			<TopBar>
 				<div className="open-close">
 					{menuOpen ? (
-						<FiX size={24} onClick={e => setMenuOpen(false)} />
+						<FiX
+							data-testid="menu-x"
+							size={24}
+							onClick={e => setMenuOpen(false)}
+						/>
 					) : (
-						<FiMenu size={24} onClick={e => setMenuOpen(true)} />
+						<FiMenu
+							data-testid="menu-menu"
+							size={24}
+							onClick={e => setMenuOpen(true)}
+						/>
 					)}
 				</div>
-				<title onClick={handleClickTitle}> beSystem </title>
+				<title onClick={handleClickTitle} data-testid="besystem-title">
+					{' '}
+					beSystem{' '}
+				</title>
 				<Toast className="logout" label="Logout">
-					<FiLogOut size={24} onClick={handleLogout} />
+					<FiLogOut
+						size={24}
+						onClick={handleLogout}
+						data-testid="signout-button"
+					/>
 				</Toast>
 			</TopBar>
 			<SideMenu open={menuOpen} />

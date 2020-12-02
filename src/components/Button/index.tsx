@@ -10,7 +10,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const Button: React.FC<ButtonProps> = ({ label, ...rest }) => {
 	return (
-		<Container type="button" {...rest}>
+		<Container type="button" data-testid="button-component" {...rest}>
 			{label}
 		</Container>
 	)

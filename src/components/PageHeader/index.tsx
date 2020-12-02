@@ -21,7 +21,10 @@ const PageHeader: React.FC<PageHeaderProps> = ({
 			<div>
 				<h1>{title}</h1>
 				{!noBackButton && (
-					<button onClick={e => history.goBack()}>
+					<button
+						data-testid="backbutton-pageheader"
+						onClick={e => history.goBack()}
+					>
 						<FiArrowLeft /> VOLTAR
 					</button>
 				)}

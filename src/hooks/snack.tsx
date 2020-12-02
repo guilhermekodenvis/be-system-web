@@ -10,8 +10,8 @@ export interface SnackMessage {
 	description?: string
 }
 
-interface SnackContextData {
-	addSnack(message: Omit<SnackMessage, 'id'>): void
+export interface SnackContextData {
+	addSnack(message: Omit<SnackMessage, 'id'>): string
 	removeSnack(id: string): void
 }
 
@@ -32,6 +32,8 @@ const SnackProvider: React.FC = ({ children }) => {
 			}
 
 			setMessages(state => [...state, toast])
+
+			return id
 		},
 		[],
 	)
@@ -50,10 +52,6 @@ const SnackProvider: React.FC = ({ children }) => {
 
 function useSnack(): SnackContextData {
 	const context = useContext(SnackContext)
-
-	if (!context) {
-		throw new Error('useSnack must be used within a SnackProvider')
-	}
 
 	return context
 }

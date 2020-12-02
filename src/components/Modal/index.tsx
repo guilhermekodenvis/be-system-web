@@ -13,6 +13,7 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({ closeModal, open, title, children }) => {
 	return (
 		<ReactModal
+			ariaHideApp={false}
 			isOpen={open}
 			contentLabel="onRequestClose Example"
 			onRequestClose={closeModal}
