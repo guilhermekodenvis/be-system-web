@@ -83,7 +83,7 @@ export const Container = styled(animated.div)<ContainerProps>`
 		color: inherit;
 	}
 	${props =>
-		!props.hasDescription &&
+		!props.hasdescription &&
 		css`
 			align-items: center;
 			svg {
