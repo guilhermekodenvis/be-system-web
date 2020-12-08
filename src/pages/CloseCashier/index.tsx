@@ -10,6 +10,7 @@ import { useModule } from '../../hooks/module'
 import { useSnack } from '../../hooks/snack'
 import api from '../../services/api'
 import convertNumberToBRLCurrency from '../../utils/convertNumberToBRLCurrency'
+import typeToCashierMovimentName from '../../utils/typeToCashierMovimentName'
 
 import { Container, Details, Relatory, Right } from './styles'
 
@@ -41,51 +42,30 @@ const CloseCashier: React.FC = () => {
 		;(async () => {
 			try {
 				const { data } = await api.get('/cashier-moviments')
-				console.log(data)
 				setCashierMoviments(data)
-			} catch (err) {
-				console.log(err)
+			} catch {
+				addSnack({
+					type: 'danger',
+					title: 'Oops!',
+					description:
+						'Algum erro aconteceu, nosso suporte já está sendo informado, use ctrl + f5.',
+				})
 			}
 		})()
 
 		changeModule('cashier')
-	}, [changeModule])
-
-	const convertType = useCallback((type: number) => {
-		if (type === 0) {
-			return 'Abertura'
-		}
-		if (type === 1) {
-			return 'Débito'
-		}
-		if (type === 2) {
-			return 'Crédito'
-		}
-		if (type === 3) {
-			return 'Dinheiro'
-		}
-		if (type === 4) {
-			return 'Sangria'
-		}
-		if (type === 5) {
-			return 'Troco'
-		}
-		if (type === 6) {
-			return 'Fechamento'
-		}
-		return ''
-	}, [])
+	}, [addSnack, changeModule])
 
 	const cashierMovimentsElement = useMemo(() => {
 		return cashierMoviments?.cashier_moviments?.map((cashierMoviment, i) => {
 			return (
 				<tr key={i}>
-					<td>{convertType(cashierMoviment.action)}</td>
+					<td>{typeToCashierMovimentName(cashierMoviment.action)}</td>
 					<td>{convertNumberToBRLCurrency(cashierMoviment.value)}</td>
 				</tr>
 			)
 		})
-	}, [cashierMoviments, convertType])
+	}, [cashierMoviments])
 
 	const handleSubmit = useCallback(
 		async (data: FormData) => {
@@ -98,9 +78,8 @@ const CloseCashier: React.FC = () => {
 					description: 'O agora o caixa está fechado.',
 				})
 
-				history.push('/')
-			} catch (err) {
-				console.log(err)
+				history.push('/cashier')
+			} catch {
 				addSnack({
 					type: 'danger',
 					title: 'Oops!',
@@ -117,7 +96,7 @@ const CloseCashier: React.FC = () => {
 				title="Fechar o caixa"
 				description="Confirme toda a movimentação e feche o caixa."
 			/>
-			<Container>
+			<Container data-testid="close-cashier-page">
 				<div>
 					<Details>
 						<div>
@@ -159,7 +138,11 @@ const CloseCashier: React.FC = () => {
 								type="password"
 								style={{ width: 360 }}
 							/>
-							<Button label="Confirmar e fechar caixa" type="submit" />
+							<Button
+								data-testid="close-cashier-button"
+								label="Confirmar e fechar caixa"
+								type="submit"
+							/>
 						</Form>
 					</Right>
 				</div>

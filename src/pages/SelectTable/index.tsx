@@ -18,6 +18,7 @@ import api from '../../services/api'
 import { useModule } from '../../hooks/module'
 import PageHeader from '../../components/PageHeader'
 import Modal from '../../components/Modal'
+import { useSnack } from '../../hooks/snack'
 
 interface ContinueToRequestFormData {
 	table_number: string
@@ -41,45 +42,25 @@ const SelectTable: React.FC = () => {
 	}, [changeModule])
 	const history = useHistory()
 	const formRef = useRef<FormHandles>(null)
+	const { addSnack } = useSnack()
+
 	const handleSubmit = useCallback(
 		async (formData: ContinueToRequestFormData) => {
 			try {
-				formRef.current?.setErrors({})
-
-				const schema = Yup.object().shape({
-					table_number: Yup.number()
-						.required('Informe a mesa')
-						.typeError('A mesa precisa ser um número.'),
-				})
-
-				await schema.validate(formData, {
-					abortEarly: false,
-				})
-
 				const {
 					data: { id },
 				} = await api.post('/table-request', formData)
 
 				history.push(`/adicionar-produto/${id}`)
-			} catch (err) {
-				if (err instanceof Yup.ValidationError) {
-					const errors = getValidationErrors(err)
-
-					formRef.current?.setErrors(errors)
-
-					return
-				}
-
-				console.log(err)
-
-				// addToast({
-				// 	type: 'error',
-				// 	title: 'Erro na autenticação',
-				// 	description: 'Ocorreu um erro ao fazer login, cheque as credenciais.',
-				// })
+			} catch {
+				addSnack({
+					type: 'danger',
+					title: 'Erro no servidor',
+					description: 'Recarregue a página e tente novamente.',
+				})
 			}
 		},
-		[history],
+		[addSnack, history],
 	)
 
 	const handleClickSubmit = useCallback(
@@ -89,17 +70,21 @@ const SelectTable: React.FC = () => {
 				const response = await api.get(
 					`table-request/verify-table/${tableNumber}`,
 				)
-				console.log(response.data)
 				if (response.data.is_available) {
 					formRef.current?.submitForm()
 				} else {
 					handleOpenModal()
 				}
-			} catch (err) {
-				console.log(err)
+			} catch {
+				addSnack({
+					title: 'Ooops',
+					description:
+						'Algum erro ocorreu no servidor, já estamos resolvendo. Tente novamente',
+					type: 'danger',
+				})
 			}
 		},
-		[handleOpenModal, tableNumber],
+		[addSnack, handleOpenModal, tableNumber],
 	)
 	return (
 		<>
@@ -107,20 +92,24 @@ const SelectTable: React.FC = () => {
 				title="Novo pedido"
 				description="Indique a mesa para continuar."
 			/>
-			<Container>
+			<Container data-testid="select-table-page">
 				<Form onSubmit={handleSubmit} ref={formRef}>
 					<Input
+						data-testid="table-number-input"
 						label="Número da mesa"
 						name="table_number"
+						type="number"
 						onChange={e => setTableNumber(e.target.value)}
 					/>
 					<div className="bt-group">
 						<Button
+							data-testid="cancel-button"
 							label="Cancelar"
 							variant="cancel"
-							onClick={e => history.push('')}
+							onClick={e => history.push('/dashboard')}
 						/>
 						<Button
+							data-testid="continue-button"
 							label="continuar"
 							size="big"
 							type="submit"
@@ -148,11 +137,13 @@ const SelectTable: React.FC = () => {
 					}}
 				>
 					<Button
+						data-testid="cancel-bt-modal"
 						variant="cancel"
 						label="Não, cancelar"
 						onClick={handleCloseModal}
 					/>
 					<Button
+						data-testid="continue-bt-modal"
 						variant="primary"
 						label="Sim, continuar"
 						onClick={formRef?.current?.submitForm}

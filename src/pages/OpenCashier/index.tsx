@@ -20,6 +20,7 @@ const OpenCashier: React.FC = () => {
 	const history = useHistory()
 	const { addSnack } = useSnack()
 	const formRef = useRef<FormHandles>(null)
+	const { changeModule } = useModule()
 
 	const handleSubmit = useCallback(
 		async (formData: DataOpenCashier) => {
@@ -42,9 +43,8 @@ const OpenCashier: React.FC = () => {
 					description: 'O caixa está aberto.',
 				})
 
-				history.push('/')
-			} catch (err) {
-				console.log(err)
+				history.push('/caixa')
+			} catch {
 				addSnack({
 					type: 'danger',
 					title: 'Oops!',
@@ -54,25 +54,29 @@ const OpenCashier: React.FC = () => {
 		},
 		[addSnack, history],
 	)
-	const { changeModule } = useModule()
 
 	useEffect(() => {
 		changeModule('cashier')
 	}, [changeModule])
 
 	const handleClickCancel = useCallback(() => {
-		history.push('/')
+		history.push('/dashboard')
 	}, [history])
 	return (
-		<Container>
+		<Container data-testid="open-cashier-page">
 			<PageHeader
 				title="Abrir o caixa"
 				description="Informe o valor inicial do caixa para iniciar as movimentações do dia"
 			/>
 
 			<Form onSubmit={handleSubmit} ref={formRef}>
-				<InputMoney label="Valor inicial" name="value" />
+				<InputMoney
+					label="Valor inicial"
+					name="value"
+					data-testid="money-input"
+				/>
 				<Input
+					data-testid="password-input"
 					label="Sua senha"
 					name="password"
 					type="password"
@@ -80,6 +84,7 @@ const OpenCashier: React.FC = () => {
 				/>
 				<div className="button-group">
 					<Button
+						data-testid="cancel-button"
 						label="Cancelar"
 						variant="cancel"
 						size="normal"
@@ -87,7 +92,8 @@ const OpenCashier: React.FC = () => {
 						onClick={handleClickCancel}
 					/>
 					<Button
-						label="Salvar"
+						data-testid="open-cashier-button"
+						label="Abrir caixa"
 						variant="primary"
 						size="normal"
 						type="submit"

@@ -49,8 +49,24 @@ const AddProductsToTableRequest: React.FC = () => {
 		changeModule('requests')
 	}, [changeModule])
 
+	useEffect(() => {
+		;(async () => {
+			try {
+				const { data } = await api.get('/products')
+				setProducts(data)
+			} catch {
+				addSnack({
+					title: 'Erro no servidor',
+					description:
+						'Recarregue e tente novamente. Nossa equipe já está sendo avisada do problema.',
+					type: 'danger',
+				})
+			}
+		})()
+	}, [addSnack])
+
 	const handleIncrementCart = useCallback((product: Product) => {
-		const newQtt = product.quantity + 1 || 1
+		const newQtt = product.quantity + 1
 		setProducts(prev => {
 			const newList = [...prev]
 			const prevIndex = newList.findIndex(prod => prod.id === product.id)
@@ -105,27 +121,26 @@ const AddProductsToTableRequest: React.FC = () => {
 	}, [])
 
 	const handleClickSendToKitchen = useCallback(async () => {
-		const response = await api.post('/table-request/add-products', {
-			products: [...productsInCart],
-			table_id,
-		})
-		if (response) {
+		try {
+			const response = await api.post('/table-request/add-products', {
+				products: [...productsInCart],
+				table_id,
+			})
 			addSnack({
 				title: 'Pronto!',
 				description: 'O pedido foi enviado para a cozinha',
 				type: 'success',
 			})
-			history.push('/')
+			history.push('/dashboard')
 			printJS(response.data.download)
+		} catch {
+			addSnack({
+				title: 'Erro!',
+				description: 'Algum erro ocorreu no servidor, tente novamente',
+				type: 'danger',
+			})
 		}
 	}, [addSnack, history, productsInCart, table_id])
-
-	useEffect(() => {
-		;(async () => {
-			const { data } = await api.get('/products')
-			setProducts(data)
-		})()
-	}, [])
 
 	const handleCloseModal = useCallback(() => {
 		setShowModal(false)
@@ -146,13 +161,11 @@ const AddProductsToTableRequest: React.FC = () => {
 		({ observation }: { observation: string }) => {
 			setProductsInCart(prev => {
 				const newList = [...prev]
-				const unchengedProductIndex = newList.findIndex(
+				const unchangedProductIndex = newList.findIndex(
 					prod => prod.product_id === currentProductToSetObservation.id,
 				)
 
-				if (unchengedProductIndex >= 0) {
-					newList[unchengedProductIndex].observation = observation
-				}
+				newList[unchangedProductIndex].observation = observation
 				return [...newList]
 			})
 			handleCloseModal()
@@ -169,6 +182,7 @@ const AddProductsToTableRequest: React.FC = () => {
 		return unduplicadCategories.map((category, i) => {
 			return (
 				<li
+					data-testid="category-item"
 					className={`${activedCategory === i && 'active'}`}
 					key={i}
 					onClick={() => {
@@ -191,7 +205,7 @@ const AddProductsToTableRequest: React.FC = () => {
 	const productList = useMemo(() => {
 		return filteredProducts?.map((product, i) => {
 			return (
-				<Product key={i}>
+				<Product key={i} data-testid="product-item">
 					<strong>{product.name}</strong>
 					<p>
 						<span>Preço </span>
@@ -201,6 +215,7 @@ const AddProductsToTableRequest: React.FC = () => {
 					<div>
 						{product.quantity > 0 && (
 							<Button
+								data-testid="observation-button"
 								style={{ maxWidth: '100% !important' }}
 								label="Adicionar observação"
 								variant="secundary-outline"
@@ -211,6 +226,7 @@ const AddProductsToTableRequest: React.FC = () => {
 						<Quantity>
 							{product.quantity > 0 && product.quantity ? (
 								<button
+									data-testid="less-button"
 									className="less"
 									onClick={() => {
 										handleDecrementCart(product)
@@ -219,18 +235,13 @@ const AddProductsToTableRequest: React.FC = () => {
 									<FiMinus size={24} />
 								</button>
 							) : (
-								<button
-									className="less"
-									disabled
-									onClick={() => {
-										handleDecrementCart(product)
-									}}
-								>
+								<button data-testid="less-button" className="less" disabled>
 									<FiMinus size={24} />
 								</button>
 							)}
 							<span>{product.quantity || 0}</span>
 							<button
+								data-testid="more-button"
 								className="more"
 								onClick={() => {
 									handleIncrementCart(product)
@@ -251,14 +262,8 @@ const AddProductsToTableRequest: React.FC = () => {
 	])
 
 	const finalPrice = useMemo(() => {
-		return new Intl.NumberFormat('pt-BR', {
-			currency: 'BRL',
-			style: 'currency',
-		}).format(
-			productsInCart.reduce(
-				(a, b) => a + (b.product_price * b.quantity || 0),
-				0,
-			) || 0,
+		return (
+			productsInCart.reduce((a, b) => a + b.product_price * b.quantity, 0) || 0
 		)
 	}, [productsInCart])
 
@@ -269,10 +274,13 @@ const AddProductsToTableRequest: React.FC = () => {
 				description="Clique no produto para anotar. Selecione a quantidade desejada pelo
 				cliente e envie o pedido para a cozinha."
 			/>
-			<Container>
+			<Container data-testid="add-products-to-table-request-page">
 				<div className="total">
 					<strong>
-						Total: <span>{finalPrice}</span>
+						Total:{' '}
+						<span data-testid="final-total-price">
+							{convertNumberToBRLCurrency(finalPrice)}
+						</span>
 					</strong>
 				</div>
 				<div className="products-list">{productList}</div>
@@ -282,6 +290,7 @@ const AddProductsToTableRequest: React.FC = () => {
 				</BottomNavigation>
 				<div className="bt-send-to-kitchen">
 					<Button
+						data-testid="send-to-kitchen-button"
 						variant="primary"
 						size="big"
 						label="Enviar para cozinha"
@@ -295,7 +304,11 @@ const AddProductsToTableRequest: React.FC = () => {
 				open={showModal}
 			>
 				<Form onSubmit={handleObservationSubmit}>
-					<Input label="Observação" name="observation" />
+					<Input
+						label="Observação"
+						name="observation"
+						data-testid="observation-field"
+					/>
 					<div
 						style={{
 							display: 'flex',
@@ -305,11 +318,18 @@ const AddProductsToTableRequest: React.FC = () => {
 						}}
 					>
 						<Button
+							data-testid="cancel-modal-button"
 							variant="cancel"
 							label="Não, cancelar"
 							onClick={handleCloseModal}
 						/>
-						<Button variant="primary" label="Sim, continuar" type="submit" />
+
+						<Button
+							data-testid="continue-modal-button"
+							variant="primary"
+							label="Continuar"
+							type="submit"
+						/>
 					</div>
 				</Form>
 			</Modal>

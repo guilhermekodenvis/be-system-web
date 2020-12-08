@@ -12,9 +12,15 @@ interface SelectInputProps {
 	data: Array<Selectables>
 	name: string
 	label: string
+	dataTestId: string
 }
 
-const SelectInput: React.FC<SelectInputProps> = ({ data, name, label }) => {
+const SelectInput: React.FC<SelectInputProps> = ({
+	data,
+	name,
+	label,
+	dataTestId,
+}) => {
 	const inputRef = useRef(null)
 	const { fieldName, defaultValue, registerField, error } = useField(name)
 
@@ -35,6 +41,7 @@ const SelectInput: React.FC<SelectInputProps> = ({ data, name, label }) => {
 				id={name}
 				defaultValue={defaultValue}
 				autoComplete="off"
+				data-testid={dataTestId}
 			>
 				{data.map((option, i) => {
 					return (

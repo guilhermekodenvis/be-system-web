@@ -6,6 +6,7 @@ import * as Yup from 'yup'
 import Button from '../../components/Button'
 import Input from '../../components/Input'
 import Title from '../../components/Title'
+import { useSnack } from '../../hooks/snack'
 import api from '../../services/api'
 import getValidationErrors from '../../utils/getValidationErrors'
 
@@ -16,13 +17,14 @@ interface RegisterFormData {
 	user_name: string
 	email: string
 	password: string
-	password_confirm: string
+	password_confirm?: string
 	cnpj: string
 }
 
 const Register: React.FC = () => {
 	const formRef = useRef<FormHandles>(null)
 	const history = useHistory()
+	const { addSnack } = useSnack()
 
 	const handleSubmit = useCallback(
 		async (data: RegisterFormData) => {
@@ -48,15 +50,10 @@ const Register: React.FC = () => {
 					abortEarly: false,
 				})
 
-				const dataToSend = {
-					user_name: data.user_name,
-					restaurant_name: data.restaurant_name,
-					password: data.password,
-					email: data.email,
-					cnpj: data.cnpj,
-				}
+				// eslint-disable-next-line no-param-reassign
+				delete data.password_confirm
 
-				await api.post('/users', dataToSend)
+				await api.post('/users', data)
 
 				history.push('/login')
 			} catch (err) {
@@ -66,33 +63,50 @@ const Register: React.FC = () => {
 					return
 				}
 
-				console.log(err)
-
-				// addToast({
-				// 	type: 'error',
-				// 	title: 'Erro na autenticação',
-				// 	description: 'Ocorreu um erro ao fazer login, cheque as credenciais.',
-				// })
+				addSnack({
+					type: 'danger',
+					title: 'Erro na autenticação',
+					description: 'Ocorreu um erro ao se cadastrar, tente novamente.',
+				})
 			}
 		},
-		[history],
+		[addSnack, history],
 	)
 	return (
-		<Container>
+		<Container data-testid="register-page">
 			<Title />
 			<Header>Registre-se</Header>
 			<Form onSubmit={handleSubmit} ref={formRef}>
-				<Input label="Nome do restaurante" name="restaurant_name" />
-				<Input label="Seu nome" name="user_name" />
-				<Input label="Seu e-mail" name="email" />
-				<Input label="Senha" name="password" type="password" />
+				<Input
+					label="Nome do restaurante"
+					name="restaurant_name"
+					data-testid="restaurant-name-input"
+				/>
+				<Input
+					label="Seu nome"
+					name="user_name"
+					data-testid="user-name-input"
+				/>
+				<Input label="Seu e-mail" name="email" data-testid="email-input" />
+				<Input
+					label="Senha"
+					name="password"
+					type="password"
+					data-testid="password-input"
+				/>
 				<Input
 					label="Confirme a senha"
 					name="password_confirm"
 					type="password"
+					data-testid="confirm-password-input"
 				/>
-				<Input label="CNPJ" name="cnpj" />
-				<Button label="Registrar" size="big" type="submit" />
+				<Input label="CNPJ" name="cnpj" data-testid="cnpj-input" />
+				<Button
+					label="Registrar"
+					size="big"
+					type="submit"
+					data-testid="submit-button"
+				/>
 			</Form>
 		</Container>
 	)

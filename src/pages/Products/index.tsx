@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FiTrash2, FiEdit3 } from 'react-icons/fi'
 import { useHistory } from 'react-router-dom'
 import Button from '../../components/Button'
@@ -7,6 +7,7 @@ import Toast from '../../components/Toast'
 import { useModule } from '../../hooks/module'
 import { useSnack } from '../../hooks/snack'
 import api from '../../services/api'
+import convertNumberToBRLCurrency from '../../utils/convertNumberToBRLCurrency'
 
 import { Table, ActionsGroup } from './styles'
 
@@ -14,12 +15,11 @@ interface Product {
 	id: string
 	name: string
 	category: string
-	priceFormatted: string
-	price: string
+	price: number
 }
 
 const Products: React.FC = () => {
-	const [products, setProducts] = useState<Omit<Product[], 'price'>>()
+	const [products, setProducts] = useState<Product[]>()
 	const history = useHistory()
 	const { changeModule } = useModule()
 	const { addSnack } = useSnack()
@@ -30,19 +30,20 @@ const Products: React.FC = () => {
 
 	useEffect(() => {
 		;(async () => {
-			const { data } = await api.get<Product[]>('/products')
-			const productsFormatted = data.map(product => {
-				return {
-					...product,
-					priceFormatted: Number(product.price).toLocaleString('pt-br', {
-						style: 'currency',
-						currency: 'BRL',
-					}),
-				}
-			})
-			setProducts(productsFormatted)
+			try {
+				const { data } = await api.get<Product[]>('/products')
+
+				setProducts(data)
+			} catch {
+				addSnack({
+					title: 'Erro',
+					description:
+						'Ocorreu um erro no servidor, nossa equipe já está cuidando disso, tente novamente',
+					type: 'danger',
+				})
+			}
 		})()
-	}, [])
+	}, [addSnack])
 
 	const handleClickEdit = useCallback(
 		(productId: string) => {
@@ -54,7 +55,7 @@ const Products: React.FC = () => {
 	const handleClickDelete = useCallback(
 		async (productId: string) => {
 			try {
-				const response = await api.delete(`products/${productId}`)
+				await api.delete(`products/${productId}`)
 				addSnack({
 					title: 'Sucesso!',
 					description: 'O produto foi deletado.',
@@ -66,10 +67,7 @@ const Products: React.FC = () => {
 				)
 
 				setProducts(newProducts)
-
-				console.log(response.data)
 			} catch (err) {
-				console.log(err)
 				addSnack({
 					title: 'Oops!',
 					description: 'Algo deu errado, tente novamente.',
@@ -79,17 +77,47 @@ const Products: React.FC = () => {
 		},
 		[addSnack, products],
 	)
+
+	const productsList = useMemo(() => {
+		return products?.map(product => (
+			<tr key={product.id} data-testid="product-element">
+				<td>{product.name}</td>
+				<td>{product.category}</td>
+				<td>{convertNumberToBRLCurrency(product.price)}</td>
+				<ActionsGroup>
+					<div>
+						<Toast label="Editar">
+							<FiEdit3
+								data-testid="edit-button"
+								color="#e6be4c"
+								onClick={e => handleClickEdit(product.id)}
+							/>
+						</Toast>
+						<Toast label="Excluir">
+							<FiTrash2
+								data-testid="delete-button"
+								color="#d95267"
+								onClick={e => handleClickDelete(product.id)}
+							/>
+						</Toast>
+					</div>
+				</ActionsGroup>
+			</tr>
+		))
+	}, [handleClickDelete, handleClickEdit, products])
+
 	return (
-		<>
+		<div data-testid="products-page">
 			<PageHeader
 				title="Meus produtos"
 				description="Essa é sua lista de produtos, edite, delete ou insira novos."
 			/>
 			<Button
-				label="Novo"
+				data-testid="go-to-new-product-page-button"
+				label="Novo produto"
 				variant="primary"
 				style={{ marginLeft: 'auto', display: 'block', marginRight: '96px' }}
-				onClick={e => history.push('novo-produto')}
+				onClick={e => history.push('/novo-produto')}
 			/>
 			<Table>
 				<thead>
@@ -100,33 +128,9 @@ const Products: React.FC = () => {
 						<th>Ações</th>
 					</tr>
 				</thead>
-				<tbody>
-					{products?.map(product => (
-						<tr key={product.id}>
-							<td>{product.name}</td>
-							<td>{product.category}</td>
-							<td>{product.priceFormatted}</td>
-							<ActionsGroup>
-								<div>
-									<Toast label="Editar">
-										<FiEdit3
-											color="#e6be4c"
-											onClick={e => handleClickEdit(product.id)}
-										/>
-									</Toast>
-									<Toast label="Excluir">
-										<FiTrash2
-											color="#d95267"
-											onClick={e => handleClickDelete(product.id)}
-										/>
-									</Toast>
-								</div>
-							</ActionsGroup>
-						</tr>
-					))}
-				</tbody>
+				<tbody>{productsList}</tbody>
 			</Table>
-		</>
+		</div>
 	)
 }
 

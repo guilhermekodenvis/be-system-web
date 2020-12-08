@@ -1,11 +1,12 @@
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import React, { useCallback, useRef } from 'react'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import * as Yup from 'yup'
 import Button from '../../../components/Button'
 import Input from '../../../components/Input'
 import Title from '../../../components/Title'
+import { useSnack } from '../../../hooks/snack'
 import api from '../../../services/api'
 import getValidationErrors from '../../../utils/getValidationErrors'
 
@@ -18,6 +19,8 @@ interface FormNewPasswordData {
 
 const NewPassword: React.FC = () => {
 	const formRef = useRef<FormHandles>(null)
+	const { addSnack } = useSnack()
+	const history = useHistory()
 
 	const params = useParams<{ token: string }>()
 
@@ -41,6 +44,13 @@ const NewPassword: React.FC = () => {
 					password: data.password,
 					token: params.token,
 				})
+
+				addSnack({
+					title: 'Sucesso!',
+					description: 'A sua senha foi alterada',
+					type: 'success',
+				})
+				history.push('/login')
 			} catch (err) {
 				if (err instanceof Yup.ValidationError) {
 					const errors = getValidationErrors(err)
@@ -50,16 +60,15 @@ const NewPassword: React.FC = () => {
 					return
 				}
 
-				console.log(err)
-
-				// addToast({
-				// 	type: 'error',
-				// 	title: 'Erro na autenticação',
-				// 	description: 'Ocorreu um erro ao fazer login, cheque as credenciais.',
-				// })
+				addSnack({
+					type: 'danger',
+					title: 'Oops',
+					description:
+						'Ocorreu um erro no servidor, nosso time já está sendo notificado.',
+				})
 			}
 		},
-		[params.token],
+		[addSnack, history, params.token],
 	)
 
 	return (
@@ -69,17 +78,28 @@ const NewPassword: React.FC = () => {
 				<h1>Esqueci minha senha</h1>
 				<p>Digite sua nova senha.</p>
 			</Header>
-			<Container>
+			<Container data-testid="new-password-page">
 				<Form onSubmit={handleSubmit} ref={formRef}>
 					<div>
-						<Input label="Nova senha" name="password" type="password" />
+						<Input
+							label="Nova senha"
+							name="password"
+							type="password"
+							data-testid="new-password-input"
+						/>
 						<Input
 							label="Confirme a nova senha"
 							name="confirm_password"
 							type="password"
+							data-testid="confirm-password-input"
 						/>
 					</div>
-					<Button label="Alterar senha" size="big" type="submit" />
+					<Button
+						label="Alterar senha"
+						size="big"
+						type="submit"
+						data-testid="submit-button"
+					/>
 				</Form>
 			</Container>
 		</>

@@ -10,6 +10,8 @@ import Toast from '../../components/Toast'
 import { useModule } from '../../hooks/module'
 import { useSnack } from '../../hooks/snack'
 import api from '../../services/api'
+import convertNumberToBRLCurrency from '../../utils/convertNumberToBRLCurrency'
+import typeToCashierMovimentName from '../../utils/typeToCashierMovimentName'
 
 import { Container, Body, Left, Right, PaymentList } from './styles'
 
@@ -25,6 +27,7 @@ interface PaymentMethod {
 
 interface TableRequest {
 	number: number
+	total: number
 	products: Array<Products>
 }
 
@@ -43,20 +46,6 @@ const PayTableRequest: React.FC = () => {
 	const { addSnack } = useSnack()
 	const { table_id } = useParams<{ table_id: string }>()
 	const history = useHistory()
-
-	useEffect(() => {
-		;(async () => {
-			const { data } = await api.get('/cashier-moviments/situation')
-			if (!data.isOpen) {
-				history.push('/abrir-caixa')
-				addSnack({
-					title: 'Atenção!',
-					description: 'O caixa precisa estar aberto para anotar pagamentos.',
-					type: 'warning',
-				})
-			}
-		})()
-	}, [addSnack, history])
 
 	useEffect(() => {
 		changeModule('cashier')
@@ -85,58 +74,23 @@ const PayTableRequest: React.FC = () => {
 		})()
 	}, [table_id])
 
-	const total = useMemo(() => {
-		return tableRequest.products?.reduce(
-			(a, b) => a + (b.product_price * b.quantity || 0),
-			0,
-		)
-	}, [tableRequest.products])
-
-	const totalFormatted = useMemo(() => {
-		return new Intl.NumberFormat('pt-BR', {
-			currency: 'BRL',
-			style: 'currency',
-		}).format(total)
-	}, [total])
-
 	const paid = useMemo(() => {
 		return paymentMethods.reduce((a, b) => Number(a) + Number(b.value), 0)
 	}, [paymentMethods])
 
-	const paidFormatted = useMemo(() => {
-		return new Intl.NumberFormat('pt-BR', {
-			currency: 'BRL',
-			style: 'currency',
-		}).format(paid)
-	}, [paid])
-
 	const rest = useMemo(() => {
-		if (total < paid) {
+		if (tableRequest.total < paid) {
 			return 0
 		}
-		return total - paid || 0
-	}, [paid, total])
-
-	const restFormatted = useMemo(() => {
-		return new Intl.NumberFormat('pt-BR', {
-			currency: 'BRL',
-			style: 'currency',
-		}).format(rest)
-	}, [rest])
+		return tableRequest.total - paid || 0
+	}, [paid, tableRequest.total])
 
 	const payback = useMemo(() => {
-		if (paid > total) {
-			return paid - total
+		if (paid > tableRequest.total) {
+			return paid - tableRequest.total
 		}
 		return 0
-	}, [paid, total])
-
-	const paybackFormatted = useMemo(() => {
-		return new Intl.NumberFormat('pt-BR', {
-			currency: 'BRL',
-			style: 'currency',
-		}).format(payback)
-	}, [payback])
+	}, [paid, tableRequest.total])
 
 	const handleClickCloseRequest = useCallback(async () => {
 		try {
@@ -156,27 +110,55 @@ const PayTableRequest: React.FC = () => {
 				description: 'O pagamento foi finalizado',
 				type: 'success',
 			})
-			history.push('/')
+			history.push('/caixa')
 		} catch (err) {
-			console.log(err)
+			addSnack({
+				title: 'Erro!',
+				description:
+					'Deu um erro no servidor, nossos mestres da programação estão cuidando disso. Recarregue e tente novamente',
+				type: 'danger',
+			})
 		}
 	}, [addSnack, history, payback, paymentMethods, table_id])
 
-	const namefyPaymentMethod = useCallback((paymentMethod: number) => {
-		if (paymentMethod === 1) {
-			return 'Débito'
-		}
-		if (paymentMethod === 2) {
-			return 'Crédito'
-		}
-		if (paymentMethod === 3) {
-			return 'Dinheiro'
-		}
-		return 'error'
-	}, [])
+	const paymentList = useMemo(() => {
+		return paymentMethods.map((paymentMethod, i) => {
+			return (
+				<li key={i} data-testid="payment-item">
+					<p>
+						{new Intl.NumberFormat('pt-BR', {
+							style: 'currency',
+							currency: 'BRL',
+						}).format(paymentMethod.value)}
+					</p>
+					<p>{typeToCashierMovimentName(paymentMethod.type)}</p>
+					<Toast label="Remover">
+						<button
+							data-testid="delete-payment-button"
+							onClick={() => handleDelete(i)}
+						>
+							<FiTrash2 size={24} />
+						</button>
+					</Toast>
+				</li>
+			)
+		})
+	}, [handleDelete, paymentMethods])
+
+	const tableRequestList = useMemo(() => {
+		return tableRequest.products?.map((product, i) => {
+			return (
+				<tr key={i} data-testid="product-element">
+					<td>{product.quantity}</td>
+					<td>{product.product_name}</td>
+					<td>{convertNumberToBRLCurrency(product.product_price)}</td>
+				</tr>
+			)
+		})
+	}, [tableRequest])
 
 	return (
-		<Container>
+		<Container data-testid="pay-table-request-page">
 			<PageHeader
 				title={`Pagar pedido da mesa ${tableRequest.number}`}
 				description="Detalhes do pedido e pagamento"
@@ -187,31 +169,37 @@ const PayTableRequest: React.FC = () => {
 					<div className="payment-info">
 						<div>
 							<strong>Total</strong>
-							<span>{totalFormatted}</span>
+							<span data-testid="total">
+								{convertNumberToBRLCurrency(tableRequest.total)}
+							</span>
 						</div>
 						<div>
 							<strong>Pago</strong>
-							<span>{paidFormatted}</span>
+							<span data-testid="paid">{convertNumberToBRLCurrency(paid)}</span>
 						</div>
 						<div>
 							<strong>Restante</strong>
-							<span>{restFormatted}</span>
+							<span data-testid="rest">{convertNumberToBRLCurrency(rest)}</span>
 						</div>
 						<div>
 							<strong>Troco</strong>
-							<span>{paybackFormatted}</span>
+							<span data-testid="payback">
+								{convertNumberToBRLCurrency(payback)}
+							</span>
 						</div>
 					</div>
 					<div className="title-payment">
 						<h2>Pagamentos</h2>
 						<Button
+							data-testid="close-and-print-button"
 							label="Finalizar e imprimir"
 							onClick={handleClickCloseRequest}
 						/>
 					</div>
 					<Form onSubmit={handleSubmit}>
-						<InputMoney label="Valor" name="value" />
+						<InputMoney label="Valor" name="value" data-testid="money-field" />
 						<SelectInput
+							dataTestId="payment-method-field"
 							data={[
 								{
 									label: 'Débito',
@@ -229,30 +217,11 @@ const PayTableRequest: React.FC = () => {
 							name="type"
 							label="Método"
 						/>
-						<button type="submit">
+						<button type="submit" data-testid="add-payment-method-button">
 							<FiPlusCircle size={24} />
 						</button>
 					</Form>
-					<PaymentList>
-						{paymentMethods.map((paymentMethod, i) => {
-							return (
-								<li key={i}>
-									<p>
-										{new Intl.NumberFormat('pt-BR', {
-											style: 'currency',
-											currency: 'BRL',
-										}).format(paymentMethod.value)}
-									</p>
-									<p>{namefyPaymentMethod(paymentMethod.type)}</p>
-									<Toast label="Remover">
-										<button onClick={() => handleDelete(i)}>
-											<FiTrash2 size={24} />
-										</button>
-									</Toast>
-								</li>
-							)
-						})}
-					</PaymentList>
+					<PaymentList>{paymentList}</PaymentList>
 				</Left>
 				<Right>
 					<h2>Lista de pedidos</h2>
@@ -264,22 +233,7 @@ const PayTableRequest: React.FC = () => {
 								<th>Preço</th>
 							</tr>
 						</thead>
-						<tbody>
-							{tableRequest.products?.map((product, i) => {
-								return (
-									<tr key={i}>
-										<td>{product.quantity}</td>
-										<td>{product.product_name}</td>
-										<td>
-											{new Intl.NumberFormat('pt-BR', {
-												style: 'currency',
-												currency: 'BRL',
-											}).format(product.product_price)}
-										</td>
-									</tr>
-								)
-							})}
-						</tbody>
+						<tbody>{tableRequestList}</tbody>
 					</table>
 				</Right>
 			</Body>

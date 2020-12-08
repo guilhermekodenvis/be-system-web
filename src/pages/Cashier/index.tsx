@@ -5,6 +5,7 @@ import Button from '../../components/Button'
 import PageHeader from '../../components/PageHeader'
 import Toast from '../../components/Toast'
 import { useModule } from '../../hooks/module'
+import { useSnack } from '../../hooks/snack'
 import api from '../../services/api'
 
 import { Container, Main, Left, Right, ButtonGroup, Table } from './styles'
@@ -12,7 +13,7 @@ import { Container, Main, Left, Right, ButtonGroup, Table } from './styles'
 interface TableRequestDetails {
 	id: string
 	number: number
-	total?: number
+	total: number
 	products: Array<Product>
 }
 
@@ -30,6 +31,7 @@ const Cashier: React.FC = () => {
 		{} as TableRequestDetails,
 	)
 	const [tableRequests, setTableRequests] = useState<Array<TableRequest>>([])
+	const { addSnack } = useSnack()
 
 	const { changeModule } = useModule()
 
@@ -45,22 +47,32 @@ const Cashier: React.FC = () => {
 				if (!data.isOpen) {
 					history.push('abrir-caixa')
 				}
-			} catch (err) {
-				console.log(err)
+			} catch {
+				addSnack({
+					title: 'Oops',
+					description:
+						'Algum erro ocorreu no servidor, nosso suporte já está sendo notificado.',
+					type: 'danger',
+				})
 			}
 		})()
-	}, [history])
+	}, [addSnack, history])
 
 	useEffect(() => {
 		;(async () => {
 			try {
-				const response = await api.get('table-request')
+				const response = await api.get('/table-request')
 				setTableRequests(response.data)
-			} catch (err) {
-				console.log(err)
+			} catch {
+				addSnack({
+					title: 'Oops',
+					description:
+						'Algum erro ocorreu no servidor, nosso suporte já está sendo notificado.',
+					type: 'danger',
+				})
 			}
 		})()
-	}, [])
+	}, [addSnack])
 
 	useEffect(() => {
 		if (tableDetailsId !== '') {
@@ -68,12 +80,17 @@ const Cashier: React.FC = () => {
 				try {
 					const response = await api.get(`table-request/${tableDetailsId}`)
 					setDetails(response.data)
-				} catch (err) {
-					console.log(err)
+				} catch {
+					addSnack({
+						title: 'Erro!',
+						description:
+							'Ocorreu um erro no servidor, nossa equipe já está sendo notificada',
+						type: 'danger',
+					})
 				}
 			})()
 		}
-	}, [tableDetailsId])
+	}, [addSnack, tableDetailsId])
 
 	const allTableRequestsElement = useMemo(() => {
 		const elementTableRequests = tableRequests.map(tableRequest => {
@@ -85,16 +102,20 @@ const Cashier: React.FC = () => {
 						{new Intl.NumberFormat('pt-BR', {
 							currency: 'BRL',
 							style: 'currency',
-						}).format(tableRequest.total || 22)}
+						}).format(tableRequest.total)}
 					</p>
 					<ButtonGroup>
 						<Toast label="Detalhes">
-							<button onClick={e => setTableDetailsId(tableRequest.id)}>
+							<button
+								data-testid="bt-details"
+								onClick={e => setTableDetailsId(tableRequest.id)}
+							>
 								<FiList size={24} />
 							</button>
 						</Toast>
 						<Toast label="Pagar">
 							<button
+								data-testid="bt-payment"
 								onClick={() => history.push(`finalizar/${tableRequest.id}`)}
 							>
 								<FiDollarSign size={24} />
@@ -116,7 +137,6 @@ const Cashier: React.FC = () => {
 				</>
 			)
 		}
-		console.log('detalhes', details)
 		return (
 			<>
 				<h2>Detalhes do pedido da mesa {details.number}</h2>
@@ -127,7 +147,7 @@ const Cashier: React.FC = () => {
 							{new Intl.NumberFormat('pt-BR', {
 								currency: 'BRL',
 								style: 'currency',
-							}).format(details.total || 22)}
+							}).format(details.total)}
 						</strong>
 					</div>
 					<Button
@@ -174,12 +194,7 @@ const Cashier: React.FC = () => {
 			/>
 		) : (
 			<Toast label="Só é possível fechar o caixa sem pedidos em aberto.">
-				<Button
-					label="Fechar caixa"
-					variant="primary"
-					disabled
-					onClick={e => console.log('eae')}
-				/>
+				<Button label="Fechar caixa" variant="primary" disabled />
 			</Toast>
 		)
 	}, [allTableRequestsElement.length, history])

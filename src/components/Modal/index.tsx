@@ -34,7 +34,7 @@ const Modal: React.FC<ModalProps> = ({ closeModal, open, title, children }) => {
 				},
 			}}
 		>
-			<Container>
+			<Container data-testid="modal-element">
 				{title && <h2>{title}</h2>}
 				{children}
 			</Container>

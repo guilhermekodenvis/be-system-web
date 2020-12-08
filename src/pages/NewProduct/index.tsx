@@ -2,7 +2,7 @@ import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import * as Yup from 'yup'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import Creatable from 'react-select/creatable'
 import Button from '../../components/Button'
 import Input from '../../components/Input'
@@ -33,6 +33,8 @@ const NewProduct: React.FC = () => {
 	const { changeModule } = useModule()
 	const [categories, setCategories] = useState<Array<Category>>([])
 	const [selectedCategory, setSelectedCategory] = useState<string>()
+	const { product_id } = useParams<{ product_id: string }>()
+	const [initialData, setInitialData] = useState({})
 
 	useEffect(() => {
 		changeModule('products')
@@ -52,12 +54,31 @@ const NewProduct: React.FC = () => {
 					return { label: category, value: category }
 				})
 				setCategories(formattedCategories)
-			} catch (err) {
-				console.log(err)
+			} catch {
+				addSnack({
+					title: 'Oops!',
+					description:
+						'Ocorreu um erro no servidor, nosso suporte já está sendo notificado.',
+					type: 'danger',
+				})
 			}
 		})()
-	}, [])
+	}, [addSnack])
 
+	useEffect(() => {
+		;(async () => {
+			try {
+				const { data } = await api.get(`/products/${product_id}`)
+				setInitialData(data)
+			} catch {
+				addSnack({
+					title: 'erro',
+					description: 'Algum erro ocorreu no servidor',
+					type: 'danger',
+				})
+			}
+		})()
+	}, [addSnack, product_id])
 	const handleSubmit = useCallback(
 		async (data: FormNewProductData) => {
 			try {
@@ -65,7 +86,9 @@ const NewProduct: React.FC = () => {
 				const schema = Yup.object().shape({
 					name: Yup.string().required('Dê um nome ao produto'),
 					// category: Yup.string().required('Selecione uma categoria'),
-					price: Yup.number().required('Coloque um preço no seu produto'),
+					price: Yup.number()
+						.required('Coloque um preço válido')
+						.typeError('Coloque um preço válido'),
 				})
 				await schema.validate(data, {
 					abortEarly: false,
@@ -95,14 +118,12 @@ const NewProduct: React.FC = () => {
 
 					return
 				}
-
-				console.log(err)
-
-				// addToast({
-				// 	type: 'error',
-				// 	title: 'Erro na autenticação',
-				// 	description: 'Ocorreu um erro ao fazer login, cheque as credenciais.',
-				// })
+				addSnack({
+					title: 'Oops!',
+					description:
+						'Ocorreu um erro no servidor, nosso suporte já está sendo notificado.',
+					type: 'danger',
+				})
 			}
 		},
 		[addSnack, history, selectedCategory],
@@ -113,8 +134,8 @@ const NewProduct: React.FC = () => {
 	}, [])
 
 	const handleClickCancel = useCallback(() => {
-		console.log('cacelou')
-	}, [])
+		history.push('/produtos')
+	}, [history])
 
 	return (
 		<>
@@ -123,7 +144,7 @@ const NewProduct: React.FC = () => {
 				description="Adicione um novo produto à sua lista"
 			/>
 			<Container>
-				<Form onSubmit={handleSubmit} ref={formRef}>
+				<Form onSubmit={handleSubmit} ref={formRef} initialData={initialData}>
 					<Input label="Nome" name="name" />
 
 					<Creatable

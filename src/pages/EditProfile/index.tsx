@@ -54,13 +54,13 @@ const EditProfile: React.FC = () => {
 					abortEarly: false,
 				})
 
-				const response = await api.put('profile', data)
+				const response = await api.put('/profile', data)
 				updateUser(response.data)
 				addSnack({
 					title: 'Perfil atualizado',
 					type: 'success',
 				})
-				history.push('/')
+				history.push('/dashboard')
 			} catch (err) {
 				if (err instanceof Yup.ValidationError) {
 					const errors = getValidationErrors(err)
@@ -73,7 +73,6 @@ const EditProfile: React.FC = () => {
 					description: 'Tente novamente mais tarde.',
 					type: 'danger',
 				})
-				console.log(err)
 			}
 		},
 		[addSnack, history, updateUser],
@@ -104,13 +103,12 @@ const EditProfile: React.FC = () => {
 					old_password: data.old_password,
 				}
 
-				const response = await api.put('profile/password', dataChange)
-				updateUser(response.data)
+				await api.put('profile/password', dataChange)
 				addSnack({
 					title: 'Senha atualizado',
 					type: 'success',
 				})
-				history.push('/')
+				history.push('/dashboard')
 			} catch (err) {
 				if (err instanceof Yup.ValidationError) {
 					const errors = getValidationErrors(err)
@@ -123,7 +121,6 @@ const EditProfile: React.FC = () => {
 					description: 'Tente novamente mais tarde.',
 					type: 'danger',
 				})
-				console.log(err)
 			}
 		},
 		[addSnack, history, updateUser],
@@ -136,14 +133,23 @@ const EditProfile: React.FC = () => {
 
 				data.append('avatar', e.target.files[0])
 
-				api.patch('/users/avatar', data).then(response => {
-					updateUser(response.data)
+				api
+					.patch('/users/avatar', data)
+					.then(response => {
+						updateUser(response.data)
 
-					addSnack({
-						type: 'success',
-						title: 'Avatar atualizado!',
+						addSnack({
+							type: 'success',
+							title: 'Avatar atualizado!',
+						})
 					})
-				})
+					.catch(() => {
+						addSnack({
+							title: 'erro',
+							description: 'ocorreu um erro',
+							type: 'danger',
+						})
+					})
 			}
 		},
 		[addSnack, updateUser],
@@ -152,7 +158,7 @@ const EditProfile: React.FC = () => {
 	return (
 		<>
 			<PageHeader title="Editar perfil" />
-			<Container>
+			<Container data-testid="edit-profile-page">
 				<ProfilePic>
 					<div>
 						<img src={user.avatar_url} alt={user.restaurant_name} />
@@ -160,6 +166,7 @@ const EditProfile: React.FC = () => {
 							<FiCamera size={24} />
 
 							<input
+								data-testid="image-input"
 								type="file"
 								id="avatar"
 								accept="image/*"
@@ -175,11 +182,20 @@ const EditProfile: React.FC = () => {
 						initialData={user}
 						ref={formRefPersonalData}
 					>
-						<Input label="Nome do restaurante" name="restaurant_name" />
-						<Input label="Seu nome" name="user_name" />
-						<Input label="Email" name="email" />
-						<Input label="CNPJ" name="cnpj" />
+						<Input
+							data-testid="restaurante-name-input"
+							label="Nome do restaurante"
+							name="restaurant_name"
+						/>
+						<Input
+							data-testid="user-name-input"
+							label="Seu nome"
+							name="user_name"
+						/>
+						<Input data-testid="email-input" label="Email" name="email" />
+						<Input data-testid="cnpj-input" label="CNPJ" name="cnpj" />
 						<Button
+							data-testid="submit-personal-data-button"
 							label="salvar alteração"
 							variant="secundary"
 							size="big"
@@ -193,14 +209,26 @@ const EditProfile: React.FC = () => {
 						onSubmit={handleSubmitChangePassword}
 						ref={formRefChangePassword}
 					>
-						<Input label="Senha atual" name="old_password" type="password" />
-						<Input label="Nova senha" name="new_password" type="password" />
 						<Input
+							data-testid="old-password-field"
+							label="Senha atual"
+							name="old_password"
+							type="password"
+						/>
+						<Input
+							data-testid="new-password-field"
+							label="Nova senha"
+							name="new_password"
+							type="password"
+						/>
+						<Input
+							data-testid="confirm-passworda-field"
 							label="Confirmar nova senha"
 							name="confirm_password"
 							type="password"
 						/>
 						<Button
+							data-testid="submit-new-password-button"
 							label="trocar senha"
 							variant="primary"
 							size="big"
