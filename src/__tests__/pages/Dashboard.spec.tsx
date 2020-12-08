@@ -48,7 +48,7 @@ describe('Dashboard page', () => {
 	})
 
 	it('should be able to render correctly the page', async () => {
-		apiMock.onGet('/cashier-moviments/situation').reply(200, { isOpen: true })
+		apiMock.onGet('/cashier/situation').reply(200, { isOpen: true })
 		apiMock.onGet('/table-request').reply(200, [])
 		await act(async () => {
 			render(<Dashboard />)
@@ -61,7 +61,7 @@ describe('Dashboard page', () => {
 	})
 
 	it('should be able to show if the cashier is closed', async () => {
-		apiMock.onGet('/cashier-moviments/situation').reply(200, { isOpen: false })
+		apiMock.onGet('/cashier/situation').reply(200, { isOpen: false })
 		apiMock.onGet('/table-request').reply(200, [])
 		await act(async () => {
 			render(<Dashboard />)
@@ -75,7 +75,7 @@ describe('Dashboard page', () => {
 	})
 
 	it('should not be able to add a request if the cashier is not oppened', async () => {
-		apiMock.onGet('/cashier-moviments/situation').reply(200, { isOpen: false })
+		apiMock.onGet('/cashier/situation').reply(200, { isOpen: false })
 		apiMock.onGet('/table-request').reply(200, [])
 		await act(async () => {
 			render(<Dashboard />)
@@ -91,7 +91,7 @@ describe('Dashboard page', () => {
 	})
 
 	it('should be able to show a message if dont recieve any table requests', async () => {
-		apiMock.onGet('/cashier-moviments/situation').reply(200, { isOpen: true })
+		apiMock.onGet('/cashier/situation').reply(200, { isOpen: true })
 		apiMock.onGet('/table-request').reply(200, [])
 		await act(async () => {
 			render(<Dashboard />)
@@ -105,7 +105,7 @@ describe('Dashboard page', () => {
 	})
 
 	it('should be able to show all the table requests in the page', async () => {
-		apiMock.onGet('/cashier-moviments/situation').reply(200, { isOpen: true })
+		apiMock.onGet('/cashier/situation').reply(200, { isOpen: true })
 		apiMock.onGet('/table-request').reply(200, apiResponse)
 		await act(async () => {
 			render(<Dashboard />)
@@ -119,7 +119,7 @@ describe('Dashboard page', () => {
 	})
 
 	it('should be able to show if some error occurred in backend', async () => {
-		apiMock.onGet('/cashier-moviments/situation').reply(400, {})
+		apiMock.onGet('/cashier/situation').reply(400, {})
 		apiMock.onGet('/table-request').reply(200, [])
 		await act(async () => {
 			render(<Dashboard />)
@@ -131,7 +131,7 @@ describe('Dashboard page', () => {
 	})
 
 	it('should be able to show if some error occurred in backend in second request', async () => {
-		apiMock.onGet('/cashier-moviments/situation').reply(200, { isOpen: true })
+		apiMock.onGet('/cashier/situation').reply(200, { isOpen: true })
 		apiMock.onGet('/table-request').reply(400, {})
 		await act(async () => {
 			render(<Dashboard />)
@@ -143,7 +143,7 @@ describe('Dashboard page', () => {
 	})
 
 	it('should work all buttons of action in a table request', async () => {
-		apiMock.onGet('/cashier-moviments/situation').reply(200, { isOpen: true })
+		apiMock.onGet('/cashier/situation').reply(200, { isOpen: true })
 		apiMock.onGet('/table-request').reply(200, apiResponse)
 		await act(async () => {
 			render(<Dashboard />)
@@ -177,7 +177,7 @@ describe('Dashboard page', () => {
 	})
 
 	it('should be able to add make a new request when the cashier is openned', async () => {
-		apiMock.onGet('/cashier-moviments/situation').reply(200, { isOpen: true })
+		apiMock.onGet('/cashier/situation').reply(200, { isOpen: true })
 		apiMock.onGet('/table-request').reply(200, apiResponse)
 		await act(async () => {
 			render(<Dashboard />)

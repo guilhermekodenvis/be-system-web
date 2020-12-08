@@ -41,7 +41,7 @@ const CloseCashier: React.FC = () => {
 	useEffect(() => {
 		;(async () => {
 			try {
-				const { data } = await api.get('/cashier-moviments')
+				const { data } = await api.get('/cashier')
 				setCashierMoviments(data)
 			} catch {
 				addSnack({
@@ -70,7 +70,7 @@ const CloseCashier: React.FC = () => {
 	const handleSubmit = useCallback(
 		async (data: FormData) => {
 			try {
-				await api.post('/cashier-moviments/close', data)
+				await api.post('/cashier/close', data)
 
 				addSnack({
 					type: 'success',

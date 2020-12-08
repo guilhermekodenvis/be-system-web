@@ -32,7 +32,7 @@ const OpenCashier: React.FC = () => {
 			}
 
 			try {
-				await api.post('/cashier-moviments/open', {
+				await api.post('/cashier/open', {
 					value: formattedNumber,
 					password: formData.password,
 				})

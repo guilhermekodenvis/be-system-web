@@ -62,7 +62,7 @@ describe('OpenCashier page', () => {
 	it('should be able to open the cashier', async () => {
 		render(<OpenCashier />)
 
-		apiMock.onPost('/cashier-moviments/open').reply(200, {})
+		apiMock.onPost('/cashier/open').reply(200, {})
 
 		const moneyInput = screen.getByTestId('money-input')
 		const passwordInput = screen.getByTestId('password-input')
@@ -81,7 +81,7 @@ describe('OpenCashier page', () => {
 	it('should be able to show if some error in the backend occurred', async () => {
 		render(<OpenCashier />)
 
-		apiMock.onPost('/cashier-moviments/open').reply(400, {})
+		apiMock.onPost('/cashier/open').reply(400, {})
 
 		const moneyInput = screen.getByTestId('money-input')
 		const passwordInput = screen.getByTestId('password-input')
@@ -100,7 +100,7 @@ describe('OpenCashier page', () => {
 	it('should be able to send data if the money is not numeric', async () => {
 		render(<OpenCashier />)
 
-		apiMock.onPost('/cashier-moviments/open').reply(400, {})
+		apiMock.onPost('/cashier/open').reply(400, {})
 
 		const moneyInput = screen.getByTestId('money-input')
 		const passwordInput = screen.getByTestId('password-input')

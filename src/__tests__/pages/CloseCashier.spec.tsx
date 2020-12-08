@@ -73,7 +73,7 @@ describe('CloseCashier page', () => {
 		mockedHistoryPush.mockClear()
 	})
 	it('should be able to render correctly the page and set the module', async () => {
-		apiMock.onGet('/cashier-moviments').reply(200, apiResponseCashierMoviments)
+		apiMock.onGet('/cashier').reply(200, apiResponseCashierMoviments)
 
 		await act(async () => {
 			render(<CloseCashier />)
@@ -85,7 +85,7 @@ describe('CloseCashier page', () => {
 	})
 
 	it('should be able to see all moviments of the day', async () => {
-		apiMock.onGet('/cashier-moviments').reply(200, apiResponseCashierMoviments)
+		apiMock.onGet('/cashier').reply(200, apiResponseCashierMoviments)
 
 		await act(async () => {
 			render(<CloseCashier />)
@@ -97,8 +97,8 @@ describe('CloseCashier page', () => {
 	})
 
 	it('should be able to close the cashier', async () => {
-		apiMock.onGet('/cashier-moviments').reply(200, apiResponseCashierMoviments)
-		apiMock.onPost('/cashier-moviments/close').reply(201, {})
+		apiMock.onGet('/cashier').reply(200, apiResponseCashierMoviments)
+		apiMock.onPost('/cashier/close').reply(201, {})
 
 		await act(async () => {
 			render(<CloseCashier />)
@@ -114,8 +114,8 @@ describe('CloseCashier page', () => {
 	})
 
 	it('should be able to show when some error occurred in the backend', async () => {
-		apiMock.onGet('/cashier-moviments').reply(400, {})
-		apiMock.onPost('/cashier-moviments/close').reply(400, {})
+		apiMock.onGet('/cashier').reply(400, {})
+		apiMock.onPost('/cashier/close').reply(400, {})
 
 		await act(async () => {
 			render(<CloseCashier />)

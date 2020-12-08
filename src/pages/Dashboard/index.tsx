@@ -44,7 +44,7 @@ const Dashboard: React.FC = () => {
 	useEffect(() => {
 		;(async () => {
 			try {
-				const { data } = await api.get('/cashier-moviments/situation')
+				const { data } = await api.get('/cashier/situation')
 				setIsCashierOpen(data.isOpen)
 			} catch {
 				addSnack({

@@ -83,9 +83,7 @@ describe('Cashier page', () => {
 	})
 
 	it('should be able to render correctly the page', async () => {
-		apiMock
-			.onGet('/cashier-moviments/situation')
-			.reply(200, apiResponseCashierOpen)
+		apiMock.onGet('/cashier/situation').reply(200, apiResponseCashierOpen)
 		apiMock.onGet('/table-request').reply(200, apiResponseDataCashier)
 
 		await act(async () => {
@@ -102,7 +100,7 @@ describe('Cashier page', () => {
 	})
 
 	it('should be able to show to user if some error occurred in the backend', async () => {
-		apiMock.onGet('/cashier-moviments/situation').reply(400, {
+		apiMock.onGet('/cashier/situation').reply(400, {
 			message: 'Oops, algum erro ocorreu, nosso suporte já está verificando',
 		})
 		apiMock.onGet('/table-request').reply(400, {
@@ -117,9 +115,7 @@ describe('Cashier page', () => {
 	})
 
 	it('should be able to go to open cashier if the cashier is not oppened', async () => {
-		apiMock
-			.onGet('/cashier-moviments/situation')
-			.reply(200, apiResponseCashierClosed)
+		apiMock.onGet('/cashier/situation').reply(200, apiResponseCashierClosed)
 		apiMock.onGet('/table-request').reply(200, apiResponseDataCashier)
 		await act(async () => {
 			render(<Cashier />)
@@ -130,9 +126,7 @@ describe('Cashier page', () => {
 	})
 
 	it('should be able to show the content of a table when click to details', async () => {
-		apiMock
-			.onGet('/cashier-moviments/situation')
-			.reply(200, apiResponseCashierOpen)
+		apiMock.onGet('/cashier/situation').reply(200, apiResponseCashierOpen)
 		apiMock.onGet('/table-request').reply(200, apiResponseDataCashier)
 		await act(async () => {
 			render(<Cashier />)
@@ -152,9 +146,7 @@ describe('Cashier page', () => {
 	})
 
 	it('should be able to go to payment page when clicked to pay', async () => {
-		apiMock
-			.onGet('/cashier-moviments/situation')
-			.reply(200, apiResponseCashierOpen)
+		apiMock.onGet('/cashier/situation').reply(200, apiResponseCashierOpen)
 		apiMock.onGet('/table-request').reply(200, apiResponseDataCashier)
 		await act(async () => {
 			render(<Cashier />)
@@ -168,9 +160,7 @@ describe('Cashier page', () => {
 	})
 
 	it('should be able to go to payment page when clicked to pay in details', async () => {
-		apiMock
-			.onGet('/cashier-moviments/situation')
-			.reply(200, apiResponseCashierOpen)
+		apiMock.onGet('/cashier/situation').reply(200, apiResponseCashierOpen)
 		apiMock.onGet('/table-request').reply(200, apiResponseDataCashier)
 		await act(async () => {
 			render(<Cashier />)
@@ -192,9 +182,7 @@ describe('Cashier page', () => {
 	})
 
 	it('shoud be able to show if some error occurred in the backend when clicked to see table request details', async () => {
-		apiMock
-			.onGet('/cashier-moviments/situation')
-			.reply(200, apiResponseCashierOpen)
+		apiMock.onGet('/cashier/situation').reply(200, apiResponseCashierOpen)
 		apiMock.onGet('/table-request').reply(200, apiResponseDataCashier)
 		await act(async () => {
 			render(<Cashier />)
@@ -211,9 +199,7 @@ describe('Cashier page', () => {
 	})
 
 	it('should be able to go to close cashier if there is not even one table to pay', async () => {
-		apiMock
-			.onGet('/cashier-moviments/situation')
-			.reply(200, apiResponseCashierOpen)
+		apiMock.onGet('/cashier/situation').reply(200, apiResponseCashierOpen)
 		apiMock.onGet('/table-request').reply(200, [])
 		await act(async () => {
 			render(<Cashier />)
