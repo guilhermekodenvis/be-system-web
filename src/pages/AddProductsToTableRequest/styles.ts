@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import { shade } from 'polished'
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 
 export const Container = styled.div`
 	padding: 12px;

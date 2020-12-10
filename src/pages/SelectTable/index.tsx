@@ -6,12 +6,10 @@ import React, {
 	useRef,
 	useState,
 } from 'react'
-import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { useHistory } from 'react-router-dom'
 import Button from '../../components/Button'
 import Input from '../../components/Input'
-import getValidationErrors from '../../utils/getValidationErrors'
 
 import { Container } from './styles'
 import api from '../../services/api'

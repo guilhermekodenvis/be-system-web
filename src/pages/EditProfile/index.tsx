@@ -123,7 +123,7 @@ const EditProfile: React.FC = () => {
 				})
 			}
 		},
-		[addSnack, history, updateUser],
+		[addSnack, history],
 	)
 
 	const handleAvatarChange = useCallback(
