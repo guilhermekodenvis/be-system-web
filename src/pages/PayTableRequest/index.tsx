@@ -17,18 +17,21 @@ import { Container, Body, Left, Right, PaymentList } from './styles'
 
 interface DataForm {
 	value: string
-	type: number
+	action: number
 }
 
 interface PaymentMethod {
+	id: string
 	value: number
-	type: number
+	action: number
 }
 
 interface TableRequest {
-	number: number
+	table: {
+		number: number
+		products: Array<Products>
+	}
 	total: number
-	products: Array<Products>
 }
 
 interface Products {
@@ -51,17 +54,16 @@ const PayTableRequest: React.FC = () => {
 		changeModule('cashier')
 	}, [changeModule])
 
-	const handleSubmit = useCallback(({ value, type }: DataForm) => {
-		const realValue = Number(value.replace(',', '.'))
-		setPaymentMethods(prev => [
-			...prev,
-			{ value: realValue, type: Number(type) },
-		])
+	const handleSubmit = useCallback(async (formData: DataForm) => {
+		const { data } = await api.post('/cashier/register', formData)
+		setPaymentMethods(prev => [...prev, data])
 	}, [])
 
-	const handleDelete = useCallback((i: number) => {
+	const handleDelete = useCallback(async (id: string) => {
+		await api.delete(`/cashier/register/${id}`)
 		setPaymentMethods(prev => {
 			const dup = [...prev]
+			const i = dup.findIndex(d => d.id === id)
 			dup.splice(i, 1)
 			return [...dup]
 		})
@@ -71,6 +73,7 @@ const PayTableRequest: React.FC = () => {
 		;(async () => {
 			const { data } = await api.get(`/table-request/${table_id}`)
 			setTableRequest(data)
+			console.log(data)
 		})()
 	}, [table_id])
 
@@ -95,16 +98,12 @@ const PayTableRequest: React.FC = () => {
 	const handleClickCloseRequest = useCallback(async () => {
 		try {
 			if (payback > 0) {
-				await api.post('/cashier-moviments/finish-payment', {
-					payments: [...paymentMethods, { type: 5, value: payback }],
-					table_id,
-				})
-			} else {
-				await api.post('/cashier-moviments/finish-payment', {
-					payments: paymentMethods,
-					table_id,
+				await api.post('/cashir/register', {
+					value: payback,
+					action: 5,
 				})
 			}
+			await api.get(`/table-request/delete/${table_id}`)
 			addSnack({
 				title: 'Sucesso!',
 				description: 'O pagamento foi finalizado',
@@ -122,20 +121,20 @@ const PayTableRequest: React.FC = () => {
 	}, [addSnack, history, payback, paymentMethods, table_id])
 
 	const paymentList = useMemo(() => {
-		return paymentMethods.map((paymentMethod, i) => {
+		return paymentMethods.map(paymentMethod => {
 			return (
-				<li key={i} data-testid="payment-item">
+				<li key={paymentMethod.id} data-testid="payment-item">
 					<p>
 						{new Intl.NumberFormat('pt-BR', {
 							style: 'currency',
 							currency: 'BRL',
 						}).format(paymentMethod.value)}
 					</p>
-					<p>{typeToCashierMovimentName(paymentMethod.type)}</p>
+					<p>{typeToCashierMovimentName(paymentMethod.action)}</p>
 					<Toast label="Remover">
 						<button
 							data-testid="delete-payment-button"
-							onClick={() => handleDelete(i)}
+							onClick={() => handleDelete(paymentMethod.id)}
 						>
 							<FiTrash2 size={24} />
 						</button>
@@ -146,7 +145,7 @@ const PayTableRequest: React.FC = () => {
 	}, [handleDelete, paymentMethods])
 
 	const tableRequestList = useMemo(() => {
-		return tableRequest.products?.map((product, i) => {
+		return tableRequest.table?.products.map((product, i) => {
 			return (
 				<tr key={i} data-testid="product-element">
 					<td>{product.quantity}</td>
@@ -160,7 +159,7 @@ const PayTableRequest: React.FC = () => {
 	return (
 		<Container data-testid="pay-table-request-page">
 			<PageHeader
-				title={`Pagar pedido da mesa ${tableRequest.number}`}
+				title={`Pagar pedido da mesa ${tableRequest.table?.number}`}
 				description="Detalhes do pedido e pagamento"
 			/>
 
@@ -214,7 +213,7 @@ const PayTableRequest: React.FC = () => {
 									value: 3,
 								},
 							]}
-							name="type"
+							name="action"
 							label="Método"
 						/>
 						<button type="submit" data-testid="add-payment-method-button">

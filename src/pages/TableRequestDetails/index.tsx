@@ -48,7 +48,7 @@ const TableRequestDetails: React.FC = () => {
 	}, [changeModule])
 
 	const mappedProducts = useMemo(() => {
-		return tableRequest?.products.map((product, i) => {
+		return tableRequest?.products?.map((product, i) => {
 			return (
 				<RequestItem key={i} data-testid="product-element-in-list">
 					<strong>
@@ -65,7 +65,7 @@ const TableRequestDetails: React.FC = () => {
 
 	const totalValue = useMemo(() => {
 		return (
-			tableRequest?.products.reduce(
+			tableRequest?.products?.reduce(
 				(a, b) => a + b.product_price * b.quantity,
 				0,
 			) || 0

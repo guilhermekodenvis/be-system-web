@@ -66,7 +66,7 @@ const AddProductsToTableRequest: React.FC = () => {
 	}, [addSnack])
 
 	const handleIncrementCart = useCallback((product: Product) => {
-		const newQtt = product.quantity + 1
+		const newQtt = product.quantity + 1 || 1
 		setProducts(prev => {
 			const newList = [...prev]
 			const prevIndex = newList.findIndex(prod => prod.id === product.id)

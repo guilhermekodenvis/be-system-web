@@ -43,16 +43,12 @@ const NewProduct: React.FC = () => {
 	useEffect(() => {
 		;(async () => {
 			try {
-				const response = await api.get<Array<{ category: string }>>(
-					'products/categories',
-				)
+				const { data } = await api.get<Array<string>>('/categories')
 
-				const allCategories = response.data.map(category => category.category)
-				const filteredCategories = Array.from(new Set(allCategories))
-
-				const formattedCategories = filteredCategories.map(category => {
+				const formattedCategories = data.map(category => {
 					return { label: category, value: category }
 				})
+
 				setCategories(formattedCategories)
 			} catch {
 				addSnack({
@@ -68,7 +64,7 @@ const NewProduct: React.FC = () => {
 	useEffect(() => {
 		;(async () => {
 			try {
-				const { data } = await api.get(`/products/${product_id}`)
+				const { data } = await api.get(`/products/${product_id || ''}`)
 				setInitialData(data)
 			} catch {
 				addSnack({
@@ -190,7 +186,7 @@ const NewProduct: React.FC = () => {
 					<div className="button-group">
 						<Button
 							label="Cancelar"
-							variant="secundary"
+							variant="cancel"
 							size="normal"
 							type="button"
 							onClick={handleClickCancel}

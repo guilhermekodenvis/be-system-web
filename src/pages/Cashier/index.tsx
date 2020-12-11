@@ -11,10 +11,12 @@ import api from '../../services/api'
 import { Container, Main, Left, Right, ButtonGroup, Table } from './styles'
 
 interface TableRequestDetails {
-	id: string
-	number: number
+	table: {
+		id: string
+		number: number
+		products: Array<Product>
+	}
 	total: number
-	products: Array<Product>
 }
 
 interface Product {
@@ -23,7 +25,11 @@ interface Product {
 	product_price: number
 }
 
-type TableRequest = Omit<TableRequestDetails, 'products'>
+type TableRequest = {
+	id: string
+	number: number
+	total: number
+}
 
 const Cashier: React.FC = () => {
 	const [tableDetailsId, setTableDetailsId] = useState('')
@@ -79,6 +85,7 @@ const Cashier: React.FC = () => {
 			;(async () => {
 				try {
 					const response = await api.get(`table-request/${tableDetailsId}`)
+					console.log(response.data)
 					setDetails(response.data)
 				} catch {
 					addSnack({
@@ -139,7 +146,7 @@ const Cashier: React.FC = () => {
 		}
 		return (
 			<>
-				<h2>Detalhes do pedido da mesa {details.number}</h2>
+				<h2>Detalhes do pedido da mesa {details.table.number}</h2>
 				<div>
 					<div>
 						<strong>
@@ -153,7 +160,7 @@ const Cashier: React.FC = () => {
 					<Button
 						variant="primary"
 						label="Pagamento"
-						onClick={() => history.push(`finalizar/${details.id}`)}
+						onClick={() => history.push(`finalizar/${details.table.id}`)}
 					/>
 				</div>
 				<Table>
@@ -165,7 +172,7 @@ const Cashier: React.FC = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{details.products?.map((product, i) => {
+						{details.table.products?.map((product, i) => {
 							return (
 								<tr key={i}>
 									<td>{product.quantity}</td>
@@ -207,7 +214,11 @@ const Cashier: React.FC = () => {
 			/>
 			<Main>
 				<Left>
-					<Button label="realizar sangria" variant="secundary" />
+					<Button
+						label="realizar sangria"
+						variant="secundary"
+						onClick={e => history.push('/sangria')}
+					/>
 					{buttonCloseCashier}
 					<h2>Pedidos em andamento</h2>
 					<ul>{allTableRequestsElement}</ul>

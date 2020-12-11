@@ -29,6 +29,7 @@ const Routes: React.FC = () => (
 		<Route path="/esqueci-a-senha/:token" component={NewPassword} />
 		<AppContainer>
 			<Route exact path="/" component={Dashboard} isPrivate />
+			<Route exact path="/dashboard" component={Dashboard} isPrivate />
 			<Route exact path="/editar-perfil" component={EditProfile} isPrivate />
 
 			<Route exact path="/novo-produto" component={NewProduct} isPrivate />

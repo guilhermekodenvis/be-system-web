@@ -19,7 +19,7 @@ interface Product {
 }
 
 const Products: React.FC = () => {
-	const [products, setProducts] = useState<Product[]>()
+	const [products, setProducts] = useState<Product[]>([])
 	const history = useHistory()
 	const { changeModule } = useModule()
 	const { addSnack } = useSnack()
@@ -79,31 +79,52 @@ const Products: React.FC = () => {
 	)
 
 	const productsList = useMemo(() => {
-		return products?.map(product => (
-			<tr key={product.id} data-testid="product-element">
-				<td>{product.name}</td>
-				<td>{product.category}</td>
-				<td>{convertNumberToBRLCurrency(product.price)}</td>
-				<ActionsGroup>
-					<div>
-						<Toast label="Editar">
-							<FiEdit3
-								data-testid="edit-button"
-								color="#e6be4c"
-								onClick={e => handleClickEdit(product.id)}
-							/>
-						</Toast>
-						<Toast label="Excluir">
-							<FiTrash2
-								data-testid="delete-button"
-								color="#d95267"
-								onClick={e => handleClickDelete(product.id)}
-							/>
-						</Toast>
-					</div>
-				</ActionsGroup>
-			</tr>
-		))
+		if (products.length === 0) {
+			return (
+				<h2>
+					Ainda não há produtos. Cadastre um novo clicando no botão acima.
+				</h2>
+			)
+		}
+		return (
+			<Table>
+				<thead>
+					<tr>
+						<th>Nome</th>
+						<th>Categoria</th>
+						<th>Preço</th>
+						<th>Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					{products.map(product => (
+						<tr key={product.id} data-testid="product-element">
+							<td>{product.name}</td>
+							<td>{product.category}</td>
+							<td>{convertNumberToBRLCurrency(product.price)}</td>
+							<ActionsGroup>
+								<div>
+									<Toast label="Editar">
+										<FiEdit3
+											data-testid="edit-button"
+											color="#e6be4c"
+											onClick={e => handleClickEdit(product.id)}
+										/>
+									</Toast>
+									<Toast label="Excluir">
+										<FiTrash2
+											data-testid="delete-button"
+											color="#d95267"
+											onClick={e => handleClickDelete(product.id)}
+										/>
+									</Toast>
+								</div>
+							</ActionsGroup>
+						</tr>
+					))}
+				</tbody>
+			</Table>
+		)
 	}, [handleClickDelete, handleClickEdit, products])
 
 	return (
@@ -119,17 +140,8 @@ const Products: React.FC = () => {
 				style={{ marginLeft: 'auto', display: 'block', marginRight: '96px' }}
 				onClick={e => history.push('/novo-produto')}
 			/>
-			<Table>
-				<thead>
-					<tr>
-						<th>Nome</th>
-						<th>Categoria</th>
-						<th>Preço</th>
-						<th>Ações</th>
-					</tr>
-				</thead>
-				<tbody>{productsList}</tbody>
-			</Table>
+
+			{productsList}
 		</div>
 	)
 }

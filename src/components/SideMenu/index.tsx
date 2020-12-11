@@ -33,20 +33,22 @@ const SideMenu: React.FC<SideMenuProps> = ({ open }) => {
 	return (
 		<Container open={open} data-testid="sidemenu-component">
 			<Profile>
-				<div>
-					<div className="top">
-						<img src={user.avatar_url} alt={user.restaurant_name} />
-						<Toast label="Editar perfil">
-							<FiEdit
-								size={24}
-								onClick={handleClickEditProfile}
-								data-testid="open-profile"
-							/>
-						</Toast>
+				{user && (
+					<div>
+						<div className="top">
+							<img src={user.avatar_url} alt={user.restaurant_name} />
+							<Toast label="Editar perfil">
+								<FiEdit
+									size={24}
+									onClick={handleClickEditProfile}
+									data-testid="open-profile"
+								/>
+							</Toast>
+						</div>
+						<strong>{user.restaurant_name}</strong>
+						<p>{user.email}</p>
 					</div>
-					<strong>{user.restaurant_name}</strong>
-					<p>{user.email}</p>
-				</div>
+				)}
 			</Profile>
 			<MenuList>
 				<MenuItem
