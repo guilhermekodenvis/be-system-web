@@ -18,15 +18,16 @@ interface FormData {
 	observation: string
 }
 
-interface CashierMoviment {
+interface Register {
 	action: number
 	value: number
+	key: string
 }
 
 interface CloseCashier {
-	cashier_moviments: CashierMoviment[]
+	registers: Register[]
 	money_in_cashier: number
-	brute_total_money: number
+	final_ammount: number
 }
 
 const CloseCashier: React.FC = () => {
@@ -43,6 +44,7 @@ const CloseCashier: React.FC = () => {
 			try {
 				const { data } = await api.get('/cashier')
 				setCashierMoviments(data)
+				console.log(data)
 			} catch {
 				addSnack({
 					type: 'danger',
@@ -57,11 +59,11 @@ const CloseCashier: React.FC = () => {
 	}, [addSnack, changeModule])
 
 	const cashierMovimentsElement = useMemo(() => {
-		return cashierMoviments?.cashier_moviments?.map((cashierMoviment, i) => {
+		return cashierMoviments?.registers?.map((register, i) => {
 			return (
 				<tr key={i}>
-					<td>{typeToCashierMovimentName(cashierMoviment.action)}</td>
-					<td>{convertNumberToBRLCurrency(cashierMoviment.value)}</td>
+					<td>{typeToCashierMovimentName(register.action)}</td>
+					<td>{convertNumberToBRLCurrency(register.value)}</td>
 				</tr>
 			)
 		})
@@ -78,7 +80,7 @@ const CloseCashier: React.FC = () => {
 					description: 'O agora o caixa está fechado.',
 				})
 
-				history.push('/cashier')
+				history.push('/caixa')
 			} catch {
 				addSnack({
 					type: 'danger',
@@ -106,11 +108,9 @@ const CloseCashier: React.FC = () => {
 							</p>
 						</div>
 						<div>
-							<strong>Valor bruto total</strong>
+							<strong>Valor acumulado do dia</strong>
 							<p>
-								{convertNumberToBRLCurrency(
-									cashierMoviments?.brute_total_money,
-								)}
+								{convertNumberToBRLCurrency(cashierMoviments?.final_ammount)}
 							</p>
 						</div>
 					</Details>
