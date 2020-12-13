@@ -73,7 +73,6 @@ const PayTableRequest: React.FC = () => {
 		;(async () => {
 			const { data } = await api.get(`/table-request/${table_id}`)
 			setTableRequest(data)
-			console.log(data)
 		})()
 	}, [table_id])
 
@@ -118,7 +117,7 @@ const PayTableRequest: React.FC = () => {
 				type: 'danger',
 			})
 		}
-	}, [addSnack, history, payback, paymentMethods, table_id])
+	}, [addSnack, history, payback, table_id])
 
 	const paymentList = useMemo(() => {
 		return paymentMethods.map(paymentMethod => {
