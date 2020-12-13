@@ -97,7 +97,7 @@ const PayTableRequest: React.FC = () => {
 	const handleClickCloseRequest = useCallback(async () => {
 		try {
 			if (payback > 0) {
-				await api.post('/cashir/register', {
+				await api.post('/cashier/register', {
 					value: payback,
 					action: 5,
 				})
