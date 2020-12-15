@@ -1,6 +1,6 @@
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import Button from '../../components/Button'
 import Input from '../../components/Input'
@@ -9,22 +9,32 @@ import PageHeader from '../../components/PageHeader'
 import { useModule } from '../../hooks/module'
 import { useSnack } from '../../hooks/snack'
 import api from '../../services/api'
+import convertNumberToBRLCurrency from '../../utils/convertNumberToBRLCurrency'
 
 import { Container } from './styles'
 
-interface DataOpenCashier {
+interface DataBleedCashier {
 	value: string
 	password: string
 }
 
-const OpenCashier: React.FC = () => {
+interface Cashier {
+	money_in_cashier: number
+}
+
+const BleedCashier: React.FC = () => {
 	const history = useHistory()
 	const formRef = useRef<FormHandles>(null)
 	const { addSnack } = useSnack()
 	const { changeModule } = useModule()
+	const [valueInCashier, setValueInCashier] = useState(0)
+
+	const handleClickCancel = useCallback(() => {
+		history.push('/dashboard')
+	}, [history])
 
 	const handleSubmit = useCallback(
-		async (formData: DataOpenCashier) => {
+		async (formData: DataBleedCashier) => {
 			formRef.current?.setErrors({})
 			const formattedNumber = Number(formData.value.replace(',', '.'))
 			// eslint-disable-next-line no-restricted-globals
@@ -33,7 +43,7 @@ const OpenCashier: React.FC = () => {
 			}
 
 			try {
-				await api.post('/cashier/open', {
+				await api.post('/cashier/bleed', {
 					value: formattedNumber,
 					password: formData.password,
 				})
@@ -41,7 +51,7 @@ const OpenCashier: React.FC = () => {
 				addSnack({
 					type: 'success',
 					title: 'Sucesso!',
-					description: 'O caixa está aberto.',
+					description: 'Sangria registrada',
 				})
 
 				history.push('/caixa')
@@ -58,32 +68,46 @@ const OpenCashier: React.FC = () => {
 
 	useEffect(() => {
 		changeModule('cashier')
-	}, [changeModule])
-
-	const handleClickCancel = useCallback(() => {
-		history.push('/dashboard')
-	}, [history])
+		;(async () => {
+			try {
+				const { data } = await api.get<Cashier>('/cashier/')
+				setValueInCashier(data.money_in_cashier)
+			} catch {
+				addSnack({
+					title: 'Erro no servidor',
+					description: 'Recarregue a página, nossa equipe já foi alertada.',
+					type: 'danger',
+				})
+			}
+		})()
+	}, [addSnack, changeModule])
 
 	return (
-		<Container data-testid="open-cashier-page">
+		<Container data-testid="bleed-cashier-page">
 			<PageHeader
-				title="Abrir o caixa"
-				description="Informe o valor inicial do caixa para iniciar as movimentações do dia"
+				title="Realizar sangria"
+				description="Informe o valor de sangria que será retirado"
 			/>
 
 			<Form onSubmit={handleSubmit} ref={formRef}>
-				<InputMoney
-					label="Valor inicial"
-					name="value"
-					data-testid="money-input"
-				/>
-				<Input
-					data-testid="password-input"
-					label="Sua senha"
-					name="password"
-					type="password"
-					style={{ width: 360 }}
-				/>
+				<div className="left">
+					<InputMoney
+						label="Valor de sangria"
+						name="value"
+						data-testid="money-input"
+					/>
+					<Input
+						data-testid="password-input"
+						label="Sua senha"
+						name="password"
+						type="password"
+						style={{ width: 360 }}
+					/>
+				</div>
+				<div className="right">
+					<strong>Valor estimado em caixa</strong>
+					<span>{convertNumberToBRLCurrency(valueInCashier)}</span>
+				</div>
 				<div className="button-group">
 					<Button
 						data-testid="cancel-button"
@@ -95,7 +119,7 @@ const OpenCashier: React.FC = () => {
 					/>
 					<Button
 						data-testid="open-cashier-button"
-						label="Abrir caixa"
+						label="Confirmar"
 						variant="primary"
 						size="normal"
 						type="submit"
@@ -106,4 +130,4 @@ const OpenCashier: React.FC = () => {
 	)
 }
 
-export default OpenCashier
+export default BleedCashier

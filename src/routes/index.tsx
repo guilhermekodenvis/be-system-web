@@ -18,6 +18,7 @@ import TableRequestDetails from '../pages/TableRequestDetails'
 import SelectTable from '../pages/SelectTable'
 import PayTableRequest from '../pages/PayTableRequest'
 import CloseCashier from '../pages/CloseCashier'
+import BleedCashier from '../pages/BleedCashier'
 import Cashier from '../pages/Cashier'
 import EditProfile from '../pages/EditProfile'
 
@@ -59,6 +60,7 @@ const Routes: React.FC = () => (
 			<Route exact path="/caixa" component={Cashier} isPrivate />
 			<Route exact path="/abrir-caixa" component={OpenCashier} isPrivate />
 			<Route exact path="/fechar-caixa" component={CloseCashier} isPrivate />
+			<Route exact path="/sangria" component={BleedCashier} isPrivate />
 		</AppContainer>
 		{/* <ReactDOMRoute path="*">
 			<Error404 />

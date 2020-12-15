@@ -132,7 +132,10 @@ const AddProductsToTableRequest: React.FC = () => {
 				type: 'success',
 			})
 			history.push('/dashboard')
-			printJS(response.data.download)
+			printJS({
+				printable: response.data.download,
+				type: 'pdf',
+			})
 		} catch {
 			addSnack({
 				title: 'Erro!',
