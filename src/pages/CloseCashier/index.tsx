@@ -1,6 +1,7 @@
 /* eslint-disable indent */
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
+import printJS from 'print-js'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import Button from '../../components/Button'
@@ -70,10 +71,11 @@ const CloseCashier: React.FC = () => {
 	}, [cashierMoviments])
 
 	const handleSubmit = useCallback(
-		async (data: FormData) => {
+		async (formData: FormData) => {
 			try {
-				await api.post('/cashier/close', data)
+				const { data } = await api.post('/cashier/close', formData)
 
+				printJS(data.invoice)
 				addSnack({
 					type: 'success',
 					title: 'Sucesso!',

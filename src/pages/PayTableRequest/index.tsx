@@ -1,4 +1,5 @@
 import { Form } from '@unform/web'
+import printJS from 'print-js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FiPlusCircle, FiTrash2 } from 'react-icons/fi'
 import { useHistory, useParams } from 'react-router-dom'
@@ -55,7 +56,11 @@ const PayTableRequest: React.FC = () => {
 	}, [changeModule])
 
 	const handleSubmit = useCallback(async (formData: DataForm) => {
-		const { data } = await api.post('/cashier/register', formData)
+		const dataToServer = {
+			value: Number(formData.value.replace(',', '.')),
+			action: formData.action,
+		}
+		const { data } = await api.post('/cashier/register', dataToServer)
 		setPaymentMethods(prev => [...prev, data])
 	}, [])
 
@@ -96,13 +101,37 @@ const PayTableRequest: React.FC = () => {
 
 	const handleClickCloseRequest = useCallback(async () => {
 		try {
+			let dataToPrint = {}
 			if (payback > 0) {
 				await api.post('/cashier/register', {
 					value: payback,
 					action: 5,
 				})
+				dataToPrint = {
+					payments: [
+						...paymentMethods,
+						{
+							id: 'id',
+							value: payback,
+							action: 5,
+						},
+					],
+					table: tableRequest.table,
+					total: tableRequest.total,
+				}
+			} else {
+				dataToPrint = {
+					payments: paymentMethods,
+					table: tableRequest.table,
+					total: tableRequest.total,
+				}
 			}
 			await api.get(`/table-request/delete/${table_id}`)
+
+			const invoiceLink = await api.post('/cashier/finish', dataToPrint)
+
+			printJS(invoiceLink.data.invoice)
+
 			addSnack({
 				title: 'Sucesso!',
 				description: 'O pagamento foi finalizado',
@@ -117,7 +146,7 @@ const PayTableRequest: React.FC = () => {
 				type: 'danger',
 			})
 		}
-	}, [addSnack, history, payback, table_id])
+	}, [addSnack, history, payback, paymentMethods, tableRequest, table_id])
 
 	const paymentList = useMemo(() => {
 		return paymentMethods.map(paymentMethod => {

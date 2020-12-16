@@ -1,5 +1,6 @@
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
+import printJS from 'print-js'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import Button from '../../components/Button'
@@ -43,10 +44,12 @@ const BleedCashier: React.FC = () => {
 			}
 
 			try {
-				await api.post('/cashier/bleed', {
+				const { data } = await api.post('/cashier/bleed', {
 					value: formattedNumber,
 					password: formData.password,
 				})
+
+				printJS(data.invoice)
 
 				addSnack({
 					type: 'success',

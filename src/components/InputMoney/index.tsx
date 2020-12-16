@@ -1,5 +1,13 @@
+/* eslint-disable no-useless-escape */
 import { useField } from '@unform/core'
-import React, { InputHTMLAttributes, useEffect, useRef } from 'react'
+import React, {
+	ChangeEvent,
+	InputHTMLAttributes,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from 'react'
 
 import { Container } from './styles'
 
@@ -10,6 +18,7 @@ interface InputMoneyProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const InputMoney: React.FC<InputMoneyProps> = ({ name, label, ...rest }) => {
 	const inputRef = useRef(null)
+	const [inputMoneyValue, setInputMoneyValue] = useState('')
 	const { fieldName, defaultValue, registerField, error } = useField(name)
 
 	useEffect(() => {
@@ -20,12 +29,29 @@ const InputMoney: React.FC<InputMoneyProps> = ({ name, label, ...rest }) => {
 		})
 	}, [fieldName, registerField])
 
+	const handleInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+		e.preventDefault()
+		const { value } = e.target
+		const validNumber = value.replace(/\D/g, '')
+		const position = validNumber.length - 2
+		const output = [
+			validNumber.slice(0, position),
+			',',
+			validNumber.slice(position),
+		].join('')
+
+		setInputMoneyValue(output)
+	}, [])
+
 	return (
 		<Container data-testid="input-money-component">
 			<label htmlFor={name}>{label}</label>
 			<div>
 				<p>R$</p>
 				<input
+					onChange={handleInputChange}
+					value={inputMoneyValue}
+					placeholder="0,00"
 					ref={inputRef}
 					type="text"
 					name={name}

@@ -32,7 +32,7 @@ export const Container = styled.div`
 			background: transparent;
 			width: calc(100% - 48px);
 			border: none;
-			/* transition: 0.2s ease; */
+			direction: rtl;
 		}
 
 		&:focus-within {
