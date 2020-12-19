@@ -18,7 +18,7 @@ import InputMoney from '../../components/InputMoney'
 interface FormNewProductData {
 	name: string
 	category: string
-	price: number
+	price: string
 }
 
 interface Category {
@@ -77,6 +77,11 @@ const NewProduct: React.FC = () => {
 	}, [addSnack, product_id])
 	const handleSubmit = useCallback(
 		async (data: FormNewProductData) => {
+			const formData = {
+				category: data.category,
+				name: data.name,
+				price: Number(data.price.replace(',', '.')),
+			}
 			try {
 				formRef.current?.setErrors({})
 				const schema = Yup.object().shape({
@@ -86,12 +91,12 @@ const NewProduct: React.FC = () => {
 						.required('Coloque um preço válido')
 						.typeError('Coloque um preço válido'),
 				})
-				await schema.validate(data, {
+				await schema.validate(formData, {
 					abortEarly: false,
 				})
 
 				await api.post('/products', {
-					...data,
+					...formData,
 					category: selectedCategory,
 				})
 				addSnack({
